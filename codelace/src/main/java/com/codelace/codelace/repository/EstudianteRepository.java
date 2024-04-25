@@ -8,6 +8,6 @@ import com.codelace.codelace.model.entity.Estudiante;
 
 public interface EstudianteRepository extends JpaRepository<Estudiante, Long>{
 	Optional<Estudiante> findById(Optional<Long> id);
-	Optional<Estudiante> findByUsuario(Optional<Long> usuario);
-    Optional<Estudiante> findByEmail(Optional<String> email);
+	Optional<Estudiante> findByUsuario(String email);
+    Optional<Estudiante> findByEmail(String email);
 }
