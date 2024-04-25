@@ -19,13 +19,13 @@ public class RutaService {
 	private final RutaMapper rutaMapper;
 
 	// Method that returns all the routes
-	public List<RutaResponseDTO> getAllRutas() {
+	public List<RutaResponseDTO> getAllRoutes() {
 		List<Ruta> rutas = rutaRepository.findAll();
 		return rutaMapper.convertToListDTO(rutas);
 	}
 
 	// Method that returns a route by its id
-	public RutaResponseDTO getRutaById(Long id) {
+	public RutaResponseDTO getRouteById(Long id) {
 		Ruta ruta = rutaRepository.findById(id)
 				.orElseThrow(
 						() -> new RuntimeException("Ruta not found"));
@@ -33,14 +33,14 @@ public class RutaService {
 	}
 
 	// Method that creates a route
-	public RutaResponseDTO createRuta(RutaRequestDTO rutaRequestDTO) {
+	public RutaResponseDTO createRoute(RutaRequestDTO rutaRequestDTO) {
 		Ruta ruta = rutaMapper.convertToEntity(rutaRequestDTO);
 		rutaRepository.save(ruta);
 		return rutaMapper.convertToDTO(ruta);
 	}
 
 	// Method that updates a route
-	public RutaResponseDTO updateRuta(Long id, RutaRequestDTO rutaRequestDTO) {
+	public RutaResponseDTO updateRoute(Long id, RutaRequestDTO rutaRequestDTO) {
 		Ruta ruta = rutaRepository.findById(id)
 				.orElseThrow(
 						() -> new RuntimeException("Ruta not found"));
@@ -52,7 +52,7 @@ public class RutaService {
 	}
 
 	// Method that deletes a route
-	public void deleteRuta(Long id) {
+	public void deleteRoute(Long id) {
 		Ruta ruta = rutaRepository.findById(id)
 				.orElseThrow(
 						() -> new RuntimeException("Ruta not found"));
