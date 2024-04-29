@@ -24,7 +24,7 @@ public class Publicacion {
 
     @ManyToOne
     @JoinColumn(name="estudiantes_id", nullable = false)
-    private Estudiante estudiante;
+    private Student estudiante;
 
     @ManyToOne
     @JoinColumn(name = "proyectos_id", nullable = false)

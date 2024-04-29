@@ -23,7 +23,7 @@ public class Inscripcion {
 
     @ManyToOne
     @JoinColumn(name="estudiantes_id", nullable = false)
-    private Estudiante estudiante;
+    private Student estudiante;
 
     @ManyToOne
     @JoinColumn(name = "rutas_id", nullable = false)

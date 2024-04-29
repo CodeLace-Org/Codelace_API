@@ -25,7 +25,7 @@ public class Suscripcion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @OneToOne
     @JoinColumn(name="estudiantes_id", nullable = false)
-    private Estudiante estudiante;
+    private Student estudiante;
 
     @ManyToOne
     @JoinColumn(name="planes_id", nullable = false)
