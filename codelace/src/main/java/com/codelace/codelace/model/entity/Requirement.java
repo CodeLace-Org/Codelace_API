@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "requisitos")
-public class Requisito {
+@Table(name = "requirements")
+public class Requirement {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
+    @Column(name = "description", nullable = false)
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name="proyectos_id", nullable = false)
-    private Proyecto proyecto;
+    @JoinColumn(name="proyects_id", nullable = false)
+    private Proyect proyect;
 }

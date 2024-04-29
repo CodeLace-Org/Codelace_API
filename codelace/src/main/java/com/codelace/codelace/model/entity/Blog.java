@@ -20,12 +20,12 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="titulo", nullable = false)
-    private String titulo;
+    @Column(name="title", nullable = false)
+    private String title;
 
-    @Column(name="contenido", nullable = false)
-    private String contenido;
+    @Column(name="content", nullable = false)
+    private String content;
     
-    @Column(name="imagen")
-    private byte[] imagen;
+    @Column(name="image")
+    private byte[] image;
 }

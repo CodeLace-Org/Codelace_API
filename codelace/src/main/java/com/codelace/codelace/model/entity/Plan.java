@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "planes")
+@Table(name = "plans")
 public class Plan {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tipo", nullable = false)
-    private String tipo;
+    @Column(name = "type", nullable = false)
+    private String type;
 
-    @Column(name = "precio", nullable = false)
-    private double precio;
+    @Column(name = "price", nullable = false)
+    private double price;
 
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
+    @Column(name = "description", nullable = false)
+    private String description;
 }

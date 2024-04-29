@@ -19,24 +19,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "suscripciones")
-public class Suscripcion {
+@Table(name = "suscriptions")
+public class Suscription {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @OneToOne
-    @JoinColumn(name="estudiantes_id", nullable = false)
-    private Student estudiante;
+    @JoinColumn(name="students_id", nullable = false)
+    private Student students;
 
     @ManyToOne
     @JoinColumn(name="planes_id", nullable = false)
-    private Plan plan;
+    private Plan plans;
     
     @Column(name = "fecha_inicio", nullable = false)
-    private Date fechaInicio;
+    private Date beginDate;
 
     @Column(name = "fecha_fin", nullable = false)
-    private Date fechaFin;
+    private Date endDate;
 
-    @Column(name = "activo", nullable = false)
-    private boolean activo;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 }

@@ -3,9 +3,9 @@ package com.codelace.codelace.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codelace.codelace.model.dto.RutaRequestDTO;
-import com.codelace.codelace.model.dto.RutaResponseDTO;
-import com.codelace.codelace.service.RutaService;
+import com.codelace.codelace.model.dto.RouteRequestDTO;
+import com.codelace.codelace.model.dto.RouteResponseDTO;
+import com.codelace.codelace.service.RouteService;
 
 import lombok.AllArgsConstructor;
 
@@ -22,28 +22,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/rutas")
 @AllArgsConstructor
-public class RutaController {
-	private final RutaService rutaService;
+public class RouteController {
+	private final RouteService routeService;
 
 	// Method that returns all the routes
 	@GetMapping
-	public ResponseEntity<List<RutaResponseDTO>> getAllRoutes() {
-		List<RutaResponseDTO> rutas = rutaService.getAllRoutes();
-		return new ResponseEntity<>(rutas, HttpStatus.OK);
+	public ResponseEntity<List<RouteResponseDTO>> getAllRoutes() {
+		List<RouteResponseDTO> routes = routeService.getAllRoutes();
+		return new ResponseEntity<>(routes, HttpStatus.OK);
 	}
 
 	// Method that returns a route by its id
 	@GetMapping("/{id}")
-	public ResponseEntity<RutaResponseDTO> getRouteById(@PathVariable long id) {
-		RutaResponseDTO ruta = rutaService.getRouteById(id);
-		return new ResponseEntity<>(ruta, HttpStatus.OK);
+	public ResponseEntity<RouteResponseDTO> getRouteById(@PathVariable long id) {
+		RouteResponseDTO route = routeService.getRouteById(id);
+		return new ResponseEntity<>(route, HttpStatus.OK);
 	}
 
 	// Method that creates a route
 	@PostMapping
-	public ResponseEntity<RutaResponseDTO> createRoute(@Validated @RequestBody RutaRequestDTO rutaRequestDTO) {
-		RutaResponseDTO ruta = rutaService.createRoute(rutaRequestDTO);
-		return new ResponseEntity<>(ruta, HttpStatus.CREATED);
+	public ResponseEntity<RouteResponseDTO> createRoute(@Validated @RequestBody RouteRequestDTO routeRequestDTO) {
+		RouteResponseDTO route = routeService.createRoute(routeRequestDTO);
+		return new ResponseEntity<>(route, HttpStatus.CREATED);
 	}
 
 }

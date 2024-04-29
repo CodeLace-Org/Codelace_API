@@ -16,19 +16,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "recursos")
-public class Recurso {
+@Table(name = "resources")
+public class Resource {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "titulo", nullable = false)
-    private String titulo;
+    @Column(name = "title", nullable = false)
+    private String title;
 
-    @Column(name = "enlace", nullable = false)
-    private String enlace;
+    @Column(name = "link", nullable = false)
+    private String link;
 
     @ManyToOne
-    @JoinColumn(name="proyectos_id", nullable = false)
-    private Proyecto proyecto;
+    @JoinColumn(name="proyects_id", nullable = false)
+    private Proyect proyect;
 }

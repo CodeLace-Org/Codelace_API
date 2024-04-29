@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RutaResponseDTO {
+public class RouteResponseDTO {
 	private Long id;
-	private String nombre;
-	private String descripcion;
-	private String icono;
+	private String name;
+	private String description;
+	private String icon;
 }
