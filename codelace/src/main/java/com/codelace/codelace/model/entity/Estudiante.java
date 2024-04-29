@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,27 +15,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "estudiantes")
+@Table(name = "students")
 public class Estudiante {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="nombre", nullable = false)
-    private String usuario;
+    @Column(name="username", nullable = false)
+    private String username;
 
-    @Column(name = "estado")
+    @Column(name = "status")
     private String estado;
 
-    @Column(name="descripcion")
-    private String descripcion;
+    @Column(name="description")
+    private String description;
 
     @Column(name="email", nullable = false)
     private String email;
 
     @Column(name="pwd", nullable = false)
-    private String password;
+    private String pwd;
 
-    @Column(name = "foto")
-    private byte[] foto;
+    @Column(name = "profile_picture")
+    private byte[] profile_picture;
 }

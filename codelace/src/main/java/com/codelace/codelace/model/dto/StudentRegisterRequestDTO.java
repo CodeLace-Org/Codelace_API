@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstudianteRegisterRequestDTO {
+public class StudentRegisterRequestDTO {
     @NotBlank (message = "El nombre de usuario no puede estar vacío.")
     @Pattern (regexp = "^[a-zA-Z0-9_]*$", message = "El nombre de usuario solo puede contener letras, números y guiones bajos.")
     private String username;
@@ -23,7 +23,7 @@ public class EstudianteRegisterRequestDTO {
     @NotBlank (message = "La contraseña no puede estar vacía.")
     @Size(min = 8, message = "La contraseña debe tener, como mínimo, 8 caracteres.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "La contraseña debe tener, al menos, una letra minúscula, una letra mayúscula y un número.")
-    private String password;
+    private String pwd;
 
     @NotBlank (message = "La contraseña no puede estar vacía.")
     @Size(min = 8, message = "La contraseña debe tener, como mínimo, 8 caracteres.")
