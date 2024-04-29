@@ -16,26 +16,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "proyectos")
-public class Proyecto {
+@Table(name = "posts")
+public class Post {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="ruta_id", nullable = false)
-    private Ruta ruta;
+    @JoinColumn(name="students_id", nullable = false)
+    private Student student;
 
-    @Column(name = "titulo", nullable = false)
-    private String titulo;
+    @ManyToOne
+    @JoinColumn(name = "proyects_id", nullable = false)
+    private Proyect proyect;
 
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
+    @Column(name = "demo_url")
+    private String demoUrl;
 
-    @Column(name = "imagen", nullable = false)
-    private byte[] imagen;
+    @Column(name = "repo_url")
+    private String repoUrl;
 
-    @Column(name = "nivel", nullable = false)
-    private int nivel;
+    @Column(name = "description", nullable = false)
+    private String description;
 
+    @Column(name = "image", nullable = false)
+    private byte[] image;
 }

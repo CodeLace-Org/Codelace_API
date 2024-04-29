@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "blogs")
-public class Blog {
+@Table(name = "routes")
+public class Route {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="title", nullable = false)
-    private String title;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name="content", nullable = false)
-    private String content;
-    
-    @Column(name="image")
-    private byte[] image;
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "icon", nullable = false)
+    private String icon;
 }

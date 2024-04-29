@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
-import com.codelace.codelace.model.entity.Estudiante;
+import com.codelace.codelace.model.entity.Student;
 import com.codelace.codelace.repository.StudentRepository;
 
 import lombok.AllArgsConstructor;
@@ -16,40 +16,40 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class StudentService {
-	private final StudentRepository estudianteRepository;
-    private final StudentMapper estudianteMapper;
+	private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
     // Method that returns all the students
     public List<StudentResponseDTO> getAllStudents() {
-        List<Estudiante> students = estudianteRepository.findAll();
-        return estudianteMapper.convertToListDTO(students);
+        List<Student> students = studentRepository.findAll();
+        return studentMapper.convertToListDTO(students);
     }
 
     // Method that returns a student by its id
     public StudentResponseDTO getStudentById(Long id) {
-        Estudiante estudiante = estudianteRepository.findById(id)
+        Student student = studentRepository.findById(id)
                 .orElseThrow(
                         () -> new RuntimeException("Student not found."));
-        return estudianteMapper.convertStudentToResponse(estudiante);
+        return studentMapper.convertStudentToResponse(student);
     }
 
     // Method that creates a student
-    public StudentResponseDTO createStudent(StudentRegisterRequestDTO estudianteRegisterRequestDTO) {
-        String email = estudianteRegisterRequestDTO.getEmail();
-        String username = estudianteRegisterRequestDTO.getUsername();
-        String password = estudianteRegisterRequestDTO.getPwd();
-        String confirmPassword = estudianteRegisterRequestDTO.getConfirmPassword();
+    public StudentResponseDTO createStudent(StudentRegisterRequestDTO studentRegisterRequestDTO) {
+        String email = studentRegisterRequestDTO.getEmail();
+        String username = studentRegisterRequestDTO.getUsername();
+        String password = studentRegisterRequestDTO.getPwd();
+        String confirmPassword = studentRegisterRequestDTO.getConfirmPassword();
 
-        if (estudianteRepository.findByEmail(email).isPresent()) {
+        if (studentRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("Email already in use.");
         } else if (!password.equals(confirmPassword)) {
             throw new RuntimeException("Passwords do not match.");
-        } else if (estudianteRepository.findByUsername(username).isPresent()){
+        } else if (studentRepository.findByUsername(username).isPresent()){
             throw new RuntimeException("Username already in use.");
         }else{
-            Estudiante estudiante = estudianteMapper.convertStudentRegisterToEntity(estudianteRegisterRequestDTO);
-            estudianteRepository.save(estudiante);
-            return estudianteMapper.convertStudentToResponse(estudiante);
+            Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
+            studentRepository.save(student);
+            return studentMapper.convertStudentToResponse(student);
         }
     }
 
@@ -57,9 +57,9 @@ public class StudentService {
 
     // Method that deletes a student
     public void deleteStudent(Long id) {
-        Estudiante estudiante = estudianteRepository.findById(id)
+        Student student = studentRepository.findById(id)
                 .orElseThrow(
                         () -> new RuntimeException("Student not found."));
-        estudianteRepository.delete(estudiante);
+        studentRepository.delete(student);
     }
 }

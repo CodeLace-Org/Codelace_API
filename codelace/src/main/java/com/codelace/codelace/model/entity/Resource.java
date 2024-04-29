@@ -5,7 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,27 +16,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "students")
-public class Estudiante {
+@Table(name = "resources")
+public class Resource {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="username", nullable = false)
-    private String username;
+    @Column(name = "title", nullable = false)
+    private String title;
 
-    @Column(name = "status")
-    private String estado;
+    @Column(name = "link", nullable = false)
+    private String link;
 
-    @Column(name="description")
-    private String description;
-
-    @Column(name="email", nullable = false)
-    private String email;
-
-    @Column(name="pwd", nullable = false)
-    private String pwd;
-
-    @Column(name = "profile_picture")
-    private byte[] profile_picture;
+    @ManyToOne
+    @JoinColumn(name="proyects_id", nullable = false)
+    private Proyect proyect;
 }

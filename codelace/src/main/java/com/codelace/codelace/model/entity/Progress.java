@@ -1,5 +1,6 @@
 package com.codelace.codelace.model.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,17 +16,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "proyectos_blogs")
-public class BlogProyecto {
-    @Id
+@Table(name = "requirements_students")
+public class Progress {
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="proyectos_id", nullable = false)
-    private Proyecto proyecto;
+    @JoinColumn(name="students_id", nullable = false)
+    private Student students;
 
     @ManyToOne
-    @JoinColumn(name="blogs_id", nullable = false)
-    private Blog blog;
+    @JoinColumn(name="requirements_id", nullable = false)
+    private Requirement requirement;
+
+    @Column(name = "completed", nullable = false)
+    private boolean completed;
 }

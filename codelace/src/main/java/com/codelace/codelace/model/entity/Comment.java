@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,24 +18,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "suscripciones")
-public class Suscripcion {
+@Table(name = "comments")
+public class Comment {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToOne
-    @JoinColumn(name="estudiantes_id", nullable = false)
-    private Estudiante estudiante;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name="planes_id", nullable = false)
-    private Plan plan;
-    
-    @Column(name = "fecha_inicio", nullable = false)
-    private Date fechaInicio;
+    @JoinColumn(name="students_id", nullable = false)
+    private Student student;
 
-    @Column(name = "fecha_fin", nullable = false)
-    private Date fechaFin;
+    @ManyToOne
+    @JoinColumn(name="posts_id", nullable = false)
+    private Post post;
 
-    @Column(name = "activo", nullable = false)
-    private boolean activo;
+    @Column(name="content", nullable = false)
+    private String content;
+
+    @Column(name="date", nullable = false)
+    private Date date;
 }

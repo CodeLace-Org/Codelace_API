@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
-import com.codelace.codelace.model.entity.Estudiante;
+import com.codelace.codelace.model.entity.Student;
 
 import lombok.AllArgsConstructor;
 
@@ -18,18 +18,18 @@ public class StudentMapper {
     private final ModelMapper modelMapper;
 
     // Request Estudiante Register DTO a Entity
-    public Estudiante convertStudentRegisterToEntity(StudentRegisterRequestDTO studentRegisterRequestDTO) {
-        return modelMapper.map(studentRegisterRequestDTO, Estudiante.class);
+    public Student convertStudentRegisterToEntity(StudentRegisterRequestDTO studentRegisterRequestDTO) {
+        return modelMapper.map(studentRegisterRequestDTO, Student.class);
     }
 
     // Estudiante Entity to response DTO
-    public StudentResponseDTO convertStudentToResponse(Estudiante student) {
+    public StudentResponseDTO convertStudentToResponse(Student student) {
         return modelMapper.map(student, StudentResponseDTO.class);
     }
 
     // List Estudiante Entity to List response DTO
-    public List<StudentResponseDTO> convertToListDTO(List<Estudiante> estudiantes) {
-        return estudiantes.stream()
+    public List<StudentResponseDTO> convertToListDTO(List<Student> students) {
+        return students.stream()
                 .map(this::convertStudentToResponse)
                 .toList();
     }

@@ -1,5 +1,7 @@
 package com.codelace.codelace.model.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,19 +19,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "recursos")
-public class Recurso {
+@Table(name = "suscriptions")
+public class Suscription {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "titulo", nullable = false)
-    private String titulo;
-
-    @Column(name = "enlace", nullable = false)
-    private String enlace;
+    @OneToOne
+    @JoinColumn(name="students_id", nullable = false)
+    private Student students;
 
     @ManyToOne
-    @JoinColumn(name="proyectos_id", nullable = false)
-    private Proyecto proyecto;
+    @JoinColumn(name="planes_id", nullable = false)
+    private Plan plans;
+    
+    @Column(name = "fecha_inicio", nullable = false)
+    private Date beginDate;
+
+    @Column(name = "fecha_fin", nullable = false)
+    private Date endDate;
+
+    @Column(name = "active", nullable = false)
+    private boolean active;
 }

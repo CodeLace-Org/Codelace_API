@@ -22,10 +22,10 @@ public class Rocket {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="estudiantes_id", nullable = false)
-    private Estudiante estudiante;
+    @JoinColumn(name="students_id", nullable = false)
+    private Student student;
 
     @ManyToOne
-    @JoinColumn(name="publicaciones_id", nullable = false)
-    private Publicacion publicacion;
+    @JoinColumn(name="posts_id", nullable = false)
+    private Post post;
 }
