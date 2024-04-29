@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstudianteLoginRequestDTO {
+public class StudentLoginRequestDTO {
     @NotBlank (message = "El email no puede estar vacío.")
     @Email
     private String email;
@@ -19,5 +19,5 @@ public class EstudianteLoginRequestDTO {
     @NotBlank (message = "La contraseña no puede estar vacía.")
     @Size(min = 8, message = "La contraseña debe tener, como mínimo, 8 caracteres.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "La contraseña debe tener, al menos, una letra minúscula, una letra mayúscula y un número.")
-    private String password;
+    private String pwd;
 }

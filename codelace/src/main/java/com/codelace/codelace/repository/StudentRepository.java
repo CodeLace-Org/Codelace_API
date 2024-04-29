@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.codelace.codelace.model.entity.Estudiante;
 
-public interface EstudianteRepository extends JpaRepository<Estudiante, Long>{
+public interface StudentRepository extends JpaRepository<Estudiante, Long>{
 	Optional<Estudiante> findById(Optional<Long> id);
-	Optional<Estudiante> findByUsuario(String username);
+	Optional<Estudiante> findByUsername(String usuario);
     Optional<Estudiante> findByEmail(String email);
 }
