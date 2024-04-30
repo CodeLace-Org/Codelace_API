@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "suscriptions")
-public class Suscription {
+@Table(name = "subscriptions")
+public class Subscription {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @OneToOne

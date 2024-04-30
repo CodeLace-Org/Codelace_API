@@ -1,5 +1,5 @@
 package com.codelace.codelace.service;
 
-public class ComentarioService {
+public class ProyectService {
 	
 }

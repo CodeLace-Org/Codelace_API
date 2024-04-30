@@ -1,5 +1,5 @@
 package com.codelace.codelace.repository;
 
-public interface RequisitoRepository {
+public interface InscriptionRepository {
 	
 }
