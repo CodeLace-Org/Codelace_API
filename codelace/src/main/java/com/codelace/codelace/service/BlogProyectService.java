@@ -1,5 +1,5 @@
 package com.codelace.codelace.service;
 
-public class ProgresoService {
-	
+public class BlogProyectService {
+    
 }

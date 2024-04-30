@@ -1,5 +1,5 @@
 package com.codelace.codelace.repository;
 
-public interface PublicacionRepository {
+public interface PostRepository {
 	
 }

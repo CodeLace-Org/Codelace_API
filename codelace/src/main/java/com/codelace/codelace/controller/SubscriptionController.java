@@ -1,5 +1,5 @@
 package com.codelace.codelace.controller;
 
-public class BlogProyectoController {
-    
+public class SubscriptionController {
+	
 }
