@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.codelace.codelace.exception.BadRequestException;
+import com.codelace.codelace.exception.ResourceDuplicateException;
+import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
@@ -29,28 +32,29 @@ public class StudentService {
     public StudentResponseDTO getStudentById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(
-                        () -> new RuntimeException("Student not found."));
+                        () -> new ResourceNotFoundException("Student not found."));
         return studentMapper.convertStudentToResponse(student);
     }
 
     // Method that creates a student
     public StudentResponseDTO createStudent(StudentRegisterRequestDTO studentRegisterRequestDTO) {
+
+        // Retrieving the information from the request
         String email = studentRegisterRequestDTO.getEmail();
         String username = studentRegisterRequestDTO.getUsername();
         String password = studentRegisterRequestDTO.getPwd();
         String confirmPassword = studentRegisterRequestDTO.getConfirmPassword();
 
-        if (studentRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("Email already in use.");
-        } else if (!password.equals(confirmPassword)) {
-            throw new RuntimeException("Passwords do not match.");
-        } else if (studentRepository.findByUsername(username).isPresent()){
-            throw new RuntimeException("Username already in use.");
-        }else{
-            Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
-            studentRepository.save(student);
-            return studentMapper.convertStudentToResponse(student);
-        }
+        // Validation: checking if the email is already being used, the username is being used or the passwords are different
+        if (studentRepository.findByEmail(email).isPresent()) throw new ResourceDuplicateException("The email address is already in use.");
+        if (studentRepository.findByUsername(username).isPresent()) throw new ResourceDuplicateException("The username is already in use.");
+        if (!password.equals(confirmPassword)) throw new BadRequestException("Passwords do not match.");
+
+        // Creating the student and returning its information
+        Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
+        studentRepository.save(student);
+        return studentMapper.convertStudentToResponse(student);
+
     }
 
     // Method that updates a student / edit profile (TODO)
@@ -59,7 +63,7 @@ public class StudentService {
     public void deleteStudent(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(
-                        () -> new RuntimeException("Student not found."));
+                        () -> new ResourceNotFoundException("Student not found."));
         studentRepository.delete(student);
     }
 }
