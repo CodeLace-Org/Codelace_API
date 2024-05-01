@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.RouteMapper;
 import com.codelace.codelace.model.dto.RouteRequestDTO;
 import com.codelace.codelace.model.dto.RouteResponseDTO;
@@ -28,7 +29,7 @@ public class RouteService {
 	public RouteResponseDTO getRouteById(Long id) {
 		Route route = routeRepository.findById(id)
 				.orElseThrow(
-						() -> new RuntimeException("Route not found"));
+						() -> new ResourceNotFoundException("Route not found."));
 		return routeMapper.convertToDTO(route);
 	}
 
@@ -43,7 +44,7 @@ public class RouteService {
 	public RouteResponseDTO updateRoute(Long id, RouteRequestDTO routeRequestDTO) {
 		Route route = routeRepository.findById(id)
 				.orElseThrow(
-						() -> new RuntimeException("Route not found"));
+						() -> new ResourceNotFoundException("Route not found."));
 		route.setName(routeRequestDTO.getName());
 		route.setDescription(routeRequestDTO.getDescription());
 		route.setIcon(routeRequestDTO.getIcon());
@@ -55,7 +56,7 @@ public class RouteService {
 	public void deleteRoute(Long id) {
 		Route route = routeRepository.findById(id)
 				.orElseThrow(
-						() -> new RuntimeException("Route not found"));
+						() -> new ResourceNotFoundException("Route not found."));
 		routeRepository.delete(route);
 	}
 
