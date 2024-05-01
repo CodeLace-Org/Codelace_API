@@ -24,7 +24,7 @@ public class Progress {
 
     @ManyToOne
     @JoinColumn(name="students_id", nullable = false)
-    private Student students;
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name="requirements_id", nullable = false)
