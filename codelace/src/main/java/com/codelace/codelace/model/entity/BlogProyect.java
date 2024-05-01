@@ -22,8 +22,8 @@ public class BlogProyect {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="proyects_id", nullable = false)
-    private Proyect proyect;
+    @JoinColumn(name="projects_id", nullable = false)
+    private Project project;
 
     @ManyToOne
     @JoinColumn(name="blogs_id", nullable = false)

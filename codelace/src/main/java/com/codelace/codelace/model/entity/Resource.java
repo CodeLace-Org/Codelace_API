@@ -29,6 +29,6 @@ public class Resource {
     private String link;
 
     @ManyToOne
-    @JoinColumn(name="proyects_id", nullable = false)
-    private Proyect proyect;
+    @JoinColumn(name="projects_id", nullable = false)
+    private Project project;
 }

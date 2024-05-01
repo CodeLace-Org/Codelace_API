@@ -27,8 +27,8 @@ public class Post {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "proyects_id", nullable = false)
-    private Proyect proyect;
+    @JoinColumn(name = "projects_id", nullable = false)
+    private Project project;
 
     @Column(name = "demo_url")
     private String demoUrl;

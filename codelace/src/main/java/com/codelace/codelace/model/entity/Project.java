@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "proyect")
-public class Proyect {
+@Table(name = "project")
+public class Project {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
