@@ -5,8 +5,9 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import com.codelace.codelace.model.dto.ProjectDetailRequestDTO;
 import com.codelace.codelace.model.dto.ProjectDetailResponseDTO;
-import com.codelace.codelace.model.objects.RequirementList;
+import com.codelace.codelace.model.entity.Project;
 
 import lombok.AllArgsConstructor;
 
@@ -16,12 +17,12 @@ public class ProjectDetailMapper {
     
     private final ModelMapper modelMapper;
     
-    public ProjectDetailResponseDTO convertToDTO(RequirementList projectDetail) {
-        return modelMapper.map(projectDetail, ProjectDetailResponseDTO.class);
+    public Project convertProjectDTOToEntity(ProjectDetailRequestDTO projectDetailRequestDTO){
+        return modelMapper.map(projectDetailRequestDTO, Project.class);
     }
 
-    public List<ProjectDetailResponseDTO> convertToListDTO(List<RequirementList> projectsDetail) {
-        return projectsDetail;
+    public ProjectDetailResponseDTO convertProjectDetailToResponse(Project project){
+        return modelMapper.map(project, ProjectDetailResponseDTO.class);
     }
 
 }

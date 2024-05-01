@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDetailResponseDTO {
-    private String title;
-    private String description;
-    private byte[] image;
-    private Long level;
+    private ProjectResponseDTO project;
     private List<RequirementResponseDTO> requirements;
 }

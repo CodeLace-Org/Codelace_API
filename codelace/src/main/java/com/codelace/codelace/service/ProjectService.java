@@ -10,6 +10,7 @@ import com.codelace.codelace.mapper.ProjectDetailMapper;
 import com.codelace.codelace.mapper.ProjectMapper;
 import com.codelace.codelace.model.dto.ProjectDetailRequestDTO;
 import com.codelace.codelace.model.dto.ProjectDetailResponseDTO;
+import com.codelace.codelace.model.dto.ProjectResponseDTO;
 import com.codelace.codelace.model.entity.Inscription;
 import com.codelace.codelace.model.entity.Progress;
 import com.codelace.codelace.model.entity.Project;
@@ -37,19 +38,27 @@ public class ProjectService {
     private final RouteRepository routeRepository;
     private final InscriptionRepository inscriptionRepository;
 
-    public ProjectDetailResponseDTO getProjectInformation(ProjectDetailRequestDTO projectDetailRequestDTO){
-        // Long studentId = projectDetailRequestDTO.getUserID();
+    public ProjectDetailResponseDTO getProjectDetail(ProjectDetailRequestDTO projectDetailRequestDTO){
+        
+        Long studentId = projectDetailRequestDTO.getUserID();
         Long projectId = projectDetailRequestDTO.getProjectID();
 
-        // Student student = studentRepository.findById(studentId)
-        // .orElseThrow(() -> new ResourceNotFoundException("Student not found."));
+        Student student = studentRepository.findById(studentId)
+            .orElseThrow(() -> new ResourceNotFoundException("Student not found."));
 
         Project project = projectRepository.findById(projectId)
             .orElseThrow(() -> new ResourceNotFoundException("Project not found."));
         
         Route route = project.getRoute();
-        Inscription inscription = inscriptionRepository.findBy
 
+        Inscription inscription = inscriptionRepository.findByStudentAndRoute(student, route)
+            .orElseThrow(() -> new ResourceNotFoundException("Inscription not found."));
+
+        ProjectResponseDTO projectResponseDTO = projectMapper.convertToDTO(project);
+
+        ProjectDetailResponseDTO projectDetailResponseDTO = projectDetailMapper.convertProjectDetailToResponse(project);
+
+        //projectDetailResponseDTO.
 
         List<Requirement> requirements = requirementRepository.findAllByProject(project);
         
