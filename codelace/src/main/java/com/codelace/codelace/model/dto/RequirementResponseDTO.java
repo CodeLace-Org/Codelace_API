@@ -7,12 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InscriptionResponseDTO {
-
-    private Long id;
+public class RequirementResponseDTO {
     
-    private Long studentId;
-
-    private Long routeId;
-
+    private String description;
 }

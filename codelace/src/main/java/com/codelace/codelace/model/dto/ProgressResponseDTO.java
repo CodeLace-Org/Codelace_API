@@ -7,12 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InscriptionResponseDTO {
-
+public class ProgressResponseDTO {
     private Long id;
-    
-    private Long studentId;
-
-    private Long routeId;
-
+    private Boolean completed;
+    private String description;
 }
