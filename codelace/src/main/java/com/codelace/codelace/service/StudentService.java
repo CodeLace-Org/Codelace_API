@@ -52,7 +52,7 @@ public class StudentService {
 
         // Creating the student and returning its information
         Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
-        studentRepository.save(student);
+        student = studentRepository.save(student);
         return studentMapper.convertStudentToResponse(student);
 
     }

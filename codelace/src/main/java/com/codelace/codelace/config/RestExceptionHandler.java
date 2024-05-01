@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.codelace.codelace.exception.BadRequestException;
+import com.codelace.codelace.exception.MaxFreeInscriptionException;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
 
@@ -67,5 +68,10 @@ public class RestExceptionHandler {
         if (!exception.getMessage().isBlank()) message = exception.getMessage();
 
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, message);
+    }
+
+    @ExceptionHandler(MaxFreeInscriptionException.class)
+    public ProblemDetail handleMaxFreeInscriptionException(MaxFreeInscriptionException exception){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "The student has already reached the maximum amount of free inscriptions.");
     }
 }
