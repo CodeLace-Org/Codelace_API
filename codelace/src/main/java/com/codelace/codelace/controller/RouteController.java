@@ -14,10 +14,13 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/routes")
@@ -46,4 +49,17 @@ public class RouteController {
 		return new ResponseEntity<>(route, HttpStatus.CREATED);
 	}
 
+	// Method that updates a route
+	@PutMapping("/{id}")
+	public ResponseEntity<RouteResponseDTO> updateRoute(@PathVariable Long id, @RequestBody RouteRequestDTO routeRequestDTO) {
+		RouteResponseDTO updatedRoute = routeService.updateRoute(id, routeRequestDTO);
+		return new ResponseEntity<>(updatedRoute, HttpStatus.OK);
+	}
+
+	// Method that eliminates a route
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteRoute(@PathVariable Long id){
+		routeService.deleteRoute(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 }
