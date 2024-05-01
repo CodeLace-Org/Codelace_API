@@ -1,5 +1,5 @@
 package com.codelace.codelace.mapper;
 
-public class BlogProyectMapper {
+public class BlogProjectMapper {
     
 }

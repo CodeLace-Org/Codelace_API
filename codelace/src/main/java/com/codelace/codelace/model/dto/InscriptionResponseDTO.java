@@ -13,6 +13,6 @@ public class InscriptionResponseDTO {
     
     private Long studentId;
 
-    private RouteResponseDTO route;
+    private Long routeId;
 
 }
