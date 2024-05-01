@@ -22,7 +22,7 @@ public class Inscription {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="estudents_id", nullable = false)
+    @JoinColumn(name="students_id", nullable = false)
     private Student student;
 
     @ManyToOne

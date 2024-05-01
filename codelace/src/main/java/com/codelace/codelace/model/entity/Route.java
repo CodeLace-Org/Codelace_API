@@ -26,6 +26,6 @@ public class Route {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "icon", nullable = false)
+    @Column(name = "icon", nullable = false, length = 1000)
     private String icon;
 }

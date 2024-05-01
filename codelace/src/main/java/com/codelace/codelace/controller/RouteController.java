@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/rutas")
+@RequestMapping("/routes")
 @AllArgsConstructor
 public class RouteController {
 	private final RouteService routeService;
