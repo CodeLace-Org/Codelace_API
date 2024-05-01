@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 public class ProjectDetailResponseDTO {
     private String title;
     private String description;
-    private Byte[] image;
+    private byte[] image;
     private Long level;
-
-    private List<> requirements;
+    private List<RequirementResponseDTO> requirements;
 }

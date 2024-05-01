@@ -1,15 +1,14 @@
 package com.codelace.codelace.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import com.codelace.codelace.model.entity.Progress;
+import com.codelace.codelace.model.entity.Requirement;
+import com.codelace.codelace.model.entity.Student;
 
 public interface ProgressRepository extends JpaRepository<Progress, Long>{
-	
-    @Query("SELECT t from Progress t WHERE t.requirement=:requirementID AND t.student=:studentID")
-    List<Progress> findByRequirementIDAndStudentID(@Param("requirementID") Long requirementID, @Param("studentID") Long studentID);
+    Optional<Progress> findByStudentAndRequirement(Student student, Requirement requirement);
 }
