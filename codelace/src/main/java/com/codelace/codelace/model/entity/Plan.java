@@ -24,7 +24,7 @@ public class Plan {
     private String type;
 
     @Column(name = "price", nullable = false)
-    private double price;
+    private Double price;
 
     @Column(name = "description", nullable = false)
     private String description;

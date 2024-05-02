@@ -25,8 +25,8 @@ public class StudentRegisterRequestDTO {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Password must have at least one uppercase letter, one lowercase letter, and one number.")
     private String pwd;
 
-    @NotBlank (message = "La contraseña no puede estar vacía.")
-    @Size(min = 8, message = "La contraseña debe tener, como mínimo, 8 caracteres.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "La contraseña debe tener, al menos, una letra mayúscula, una letra minúscula y un número.")
+    @NotBlank (message = "Password cannot be empty.")
+    @Size(min = 8, message = "Password must have at least 8 characters.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Password must have at least one uppercase letter, one lowercase letter, and one number.")
     private String confirmPassword;
 }

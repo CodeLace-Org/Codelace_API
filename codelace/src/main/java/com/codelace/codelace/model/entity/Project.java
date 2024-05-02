@@ -36,6 +36,6 @@ public class Project {
     private byte[] image;
 
     @Column(name = "level", nullable = false)
-    private int level;
+    private Integer level;
 
 }
