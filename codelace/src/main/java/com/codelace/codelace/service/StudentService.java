@@ -12,8 +12,11 @@ import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
+import com.codelace.codelace.model.dto.RouteRequestDTO;
+import com.codelace.codelace.model.dto.RouteResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.codelace.codelace.model.entity.Plan;
 import com.codelace.codelace.model.entity.Progress;
 import com.codelace.codelace.model.entity.Project;
@@ -83,7 +86,36 @@ public class StudentService {
 
 	}
 
-	// Method that updates a student / edit profile (TODO)
+	// Method that updates a student / edit profile
+	public StudentResponseDTO updateStudent(Long id, StudentUpdateRequestDTO studentUpdateRequestDTO) {
+		Student student = studentRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Student not found."));
+		
+		String email = studentUpdateRequestDTO.getEmail();
+		String username = studentUpdateRequestDTO.getUsername();
+		String password = studentUpdateRequestDTO.getPwd();
+		String confirmPassword = studentUpdateRequestDTO.getConfirmPassword();
+		String description = studentUpdateRequestDTO.getDescription();
+		String status = studentUpdateRequestDTO.getStatus();
+		byte[] profile_picture = studentUpdateRequestDTO.getProfile_picture();
+
+		if(!email.equals(student.getEmail()) && studentRepository.findByEmail(email).isPresent())
+			throw new ResourceDuplicateException("The email address is already in use.");
+		if(!username.equals(student.getUsername()) && studentRepository.findByUsername(username).isPresent())
+			throw new ResourceDuplicateException("The username is already in use.");
+		if(!password.equals(confirmPassword))
+			throw new BadRequestException("Passwords do not match.");
+		
+		student.setEmail(email);
+		student.setUsername(username);
+		student.setPwd(password);
+		student.setDescription(description);
+		student.setStatus(status);
+		student.setProfile_picture(profile_picture);
+		//student.setProfile_picture(studentUpdateRequestDTO.getProfile_picture());
+		studentRepository.save(student);
+		return studentMapper.convertStudentToResponse(student);
+	}
 
 	// Method that deletes a student
 	public void deleteStudent(Long id) {
