@@ -5,8 +5,10 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Student;
 
 import lombok.AllArgsConstructor;
@@ -32,5 +34,10 @@ public class StudentMapper {
         return students.stream()
                 .map(this::convertStudentToResponse)
                 .toList();
+    }
+
+	// Project Entity to Response DTO
+    public ProjectDetailsResponseDTO convertProjectToResponse(Project project) {
+        return modelMapper.map(project, ProjectDetailsResponseDTO.class);
     }
 }

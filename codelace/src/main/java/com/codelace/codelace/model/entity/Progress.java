@@ -31,5 +31,5 @@ public class Progress {
     private Requirement requirement;
 
     @Column(name = "completed", nullable = false)
-    private boolean completed;
+    private Boolean completed;
 }

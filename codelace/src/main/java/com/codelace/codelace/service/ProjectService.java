@@ -1,9 +1,9 @@
 package com.codelace.codelace.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.ProjectMapper;
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
@@ -18,7 +18,10 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class ProjectService {
+	// Instance mapper
 	private final ProjectMapper projectMapper;
+
+	// Instances of the repositories
 	private final ProjectRepository projectRepository;
 	private final RouteRepository routeRepository;
 
@@ -38,7 +41,7 @@ public class ProjectService {
 	// Method that creates a project
 	public ProjectResponseDTO createProject(ProjectRequestDTO projectRequestDTO) {
 		Project project = projectMapper.convertToEntity(projectRequestDTO);
-		Route route =  routeRepository.findById(projectRequestDTO.getRoute())
+		Route route = routeRepository.findById(projectRequestDTO.getRoute())
 				.orElseThrow(() -> new ResourceNotFoundException("Route not found."));
 		project.setRoute(route);
 		project = projectRepository.save(project);
