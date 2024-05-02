@@ -1,10 +1,6 @@
 package com.codelace.codelace.exception;
 
 
-public class ResourceNotFoundException extends RuntimeException{
-    public ResourceNotFoundException(){}
+public class ResourceNotFoundException {
 
-    public ResourceNotFoundException(String message){
-        super(message);
-    }
 }
