@@ -1,5 +1,14 @@
 package com.codelace.codelace.repository;
 
-public interface ResourceRepository {
-	
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.codelace.codelace.model.entity.Project;
+import com.codelace.codelace.model.entity.Resource;
+
+public interface ResourceRepository extends JpaRepository<Resource, Long> {
+	Optional<Resource> findById(Long id);
+	List<Resource> findAllByProject(Project project);
 }
