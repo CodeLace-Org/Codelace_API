@@ -14,11 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
+import com.codelace.codelace.model.dto.RouteRequestDTO;
+import com.codelace.codelace.model.dto.RouteResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.codelace.codelace.service.StudentService;
 
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/students")
@@ -44,9 +49,17 @@ public class StudentController {
 	// Method that creates a student
 	@PostMapping
 	public ResponseEntity<StudentResponseDTO> createStudent(
-			@Validated @RequestBody StudentRegisterRequestDTO estudianteRegisterRequestDTO) {
-		StudentResponseDTO student = studentService.createStudent(estudianteRegisterRequestDTO);
+			@Validated @RequestBody StudentRegisterRequestDTO studentRegisterRequestDTO) {
+		StudentResponseDTO student = studentService.createStudent(studentRegisterRequestDTO);
 		return new ResponseEntity<>(student, HttpStatus.CREATED);
+	}
+
+	// Method that updates a student
+	@PutMapping("/{id}")
+	public ResponseEntity<StudentResponseDTO> updateStudent(@PathVariable Long id, @RequestBody StudentUpdateRequestDTO studentUpdateRequestDTO) {
+		// StudentRegisterRequestDTO updatedStudent = studentService.updateStudent(id, studentRegisterRequestDTO);
+		StudentResponseDTO updatedStudent = studentService.updateStudent(id, studentUpdateRequestDTO);
+		return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
 	}
 
 	// Method that deletes a student
