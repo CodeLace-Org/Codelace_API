@@ -1,5 +1,6 @@
 package com.codelace.codelace.model.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "rockets")
-public class Rocket {
+@Table(name = "posts")
+public class Post {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +27,18 @@ public class Rocket {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name="posts_id", nullable = false)
-    private Post post;
+    @JoinColumn(name = "projects_id", nullable = false)
+    private Project project;
+
+    @Column(name = "demo_url")
+    private String demoUrl;
+
+    @Column(name = "repo_url")
+    private String repoUrl;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "image", nullable = false)
+    private byte[] image;
 }
