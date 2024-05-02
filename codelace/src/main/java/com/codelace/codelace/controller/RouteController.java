@@ -3,6 +3,7 @@ package com.codelace.codelace.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codelace.codelace.model.dto.ProjectResponseDTO;
 import com.codelace.codelace.model.dto.RouteRequestDTO;
 import com.codelace.codelace.model.dto.RouteResponseDTO;
 import com.codelace.codelace.service.RouteService;
@@ -61,5 +62,14 @@ public class RouteController {
 	public ResponseEntity<Void> deleteRoute(@PathVariable Long id){
 		routeService.deleteRoute(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	// ---------------------------- ENDPOINTS
+
+	//Method that gets all the projects by a routeId
+	@GetMapping("/{id}/projects")
+	public ResponseEntity<List<ProjectResponseDTO>> getProjectsByRoute(@PathVariable Long id){
+		List<ProjectResponseDTO> projects = routeService.getProjectsByRoute(id);
+		return new ResponseEntity<>(projects, HttpStatus.OK);
 	}
 }

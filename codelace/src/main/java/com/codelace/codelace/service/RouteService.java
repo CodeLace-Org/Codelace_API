@@ -5,10 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codelace.codelace.exception.ResourceNotFoundException;
+import com.codelace.codelace.mapper.ProjectMapper;
 import com.codelace.codelace.mapper.RouteMapper;
+import com.codelace.codelace.model.dto.ProjectResponseDTO;
 import com.codelace.codelace.model.dto.RouteRequestDTO;
 import com.codelace.codelace.model.dto.RouteResponseDTO;
+import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Route;
+import com.codelace.codelace.repository.ProjectRepository;
 import com.codelace.codelace.repository.RouteRepository;
 
 import lombok.AllArgsConstructor;
@@ -17,8 +21,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RouteService {
 	private final RouteRepository routeRepository;
+	private final ProjectRepository projectRepository;
 	private final RouteMapper routeMapper;
-
+	private final ProjectMapper projectMapper;
 	// Method that returns all the routes
 	public List<RouteResponseDTO> getAllRoutes() {
 		List<Route> routes = routeRepository.findAll();
@@ -60,4 +65,10 @@ public class RouteService {
 		routeRepository.delete(route);
 	}
 
+	//Method that returns all the projects by a routeId
+	public List<ProjectResponseDTO> getProjectsByRoute(Long routeID){
+		List<Project> projects = projectRepository.findAllByRouteId(routeID)
+			.orElseThrow(() -> new ResourceNotFoundException("Projects not found."));
+		return projectMapper.convertToListDTO(projects);
+	}
 }
