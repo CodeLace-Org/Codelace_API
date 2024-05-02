@@ -18,6 +18,7 @@ import com.codelace.codelace.exception.InsufficientSubscriptionPlan;
 import com.codelace.codelace.exception.MaxFreeInscriptionException;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
+import com.codelace.codelace.exception.SubscriptionNotActiveException;
 
 import lombok.AllArgsConstructor;
 
@@ -79,5 +80,10 @@ public class RestExceptionHandler {
     @ExceptionHandler(InsufficientSubscriptionPlan.class)
     public ProblemDetail handleInsufficientSubscriptionPlan(InsufficientSubscriptionPlan exception){
         return ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, "The student needs a non-free plan to access this content.");
+    }
+
+    @ExceptionHandler(SubscriptionNotActiveException.class)
+    public ProblemDetail handleSubscriptionNotActiveException(SubscriptionNotActiveException exception){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, "The student's subsçription is not active.");
     }
 }

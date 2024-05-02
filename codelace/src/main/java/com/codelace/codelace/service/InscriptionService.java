@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.codelace.codelace.exception.MaxFreeInscriptionException;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
+import com.codelace.codelace.exception.SubscriptionNotActiveException;
 import com.codelace.codelace.mapper.InscriptionMapper;
 import com.codelace.codelace.model.dto.InscriptionRequestDTO;
 import com.codelace.codelace.model.dto.InscriptionResponseDTO;
@@ -64,6 +65,9 @@ public class InscriptionService {
         // Get the subscription associated to the Student
         Subscription subscription = subscriptionRepository.findById(student.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Subscription not found."));
+
+        // Verify if the subscription is active
+        if(!subscription.getActive()) throw new SubscriptionNotActiveException();
         
         // Get the Plan of the Subscription
         Plan plan = subscription.getPlan();
