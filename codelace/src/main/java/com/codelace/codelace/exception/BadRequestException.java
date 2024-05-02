@@ -1,9 +1,5 @@
 package com.codelace.codelace.exception;
 
-public class BadRequestException extends RuntimeException {
-    public BadRequestException() {}
+public class BadRequestException{
 
-    public BadRequestException(String message) {
-        super(message);
-    } 
 }
