@@ -2,8 +2,10 @@ package com.codelace.codelace.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codelace.codelace.model.dto.PostResponseDTO;
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
 import com.codelace.codelace.model.dto.ProjectResponseDTO;
+import com.codelace.codelace.service.PostService;
 import com.codelace.codelace.service.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProjectController {
 
 	private final ProjectService projectService;
-
+	private final PostService postService;
 	// Method that returns all the projects
 	@GetMapping
 	public ResponseEntity<List<ProjectResponseDTO>> getAllProjects() {
@@ -52,4 +54,9 @@ public class ProjectController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
+	@GetMapping("/{id}/posts")
+	public ResponseEntity<List<PostResponseDTO>> getPostsByProjectId(@PathVariable Long id){
+		List<PostResponseDTO> posts = postService.getPostsByProjectId(id);
+		return new ResponseEntity<>(posts, HttpStatus.OK);
+	}
 }

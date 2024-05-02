@@ -1,5 +1,7 @@
 package com.codelace.codelace.model.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +40,9 @@ public class Post {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    @Column(name = "date", nullable = false)
+    private Date date;
 
     @Column(name = "image", nullable = false)
     private byte[] image;
