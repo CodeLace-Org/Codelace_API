@@ -40,5 +40,5 @@ public class Subscription {
     private Date endDate;
 
     @Column(name = "active", nullable = false)
-    private boolean active;
+    private Boolean active;
 }

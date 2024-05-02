@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codelace.codelace.exception.BadRequestException;
+import com.codelace.codelace.exception.InsufficientSubscriptionPlan;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.StudentMapper;
@@ -13,16 +14,19 @@ import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.entity.Plan;
 import com.codelace.codelace.model.entity.Progress;
 import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Requirement;
 import com.codelace.codelace.model.entity.Route;
 import com.codelace.codelace.model.entity.Student;
+import com.codelace.codelace.model.entity.Subscription;
 import com.codelace.codelace.repository.InscriptionRepository;
 import com.codelace.codelace.repository.ProgressRepository;
 import com.codelace.codelace.repository.ProjectRepository;
 import com.codelace.codelace.repository.RequirementRepository;
 import com.codelace.codelace.repository.StudentRepository;
+import com.codelace.codelace.repository.SubscriptionRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -38,6 +42,7 @@ public class StudentService {
 	private final InscriptionRepository inscriptionRepository;
 	private final RequirementRepository requirementRepository;
 	private final ProgressRepository progressRepository;
+	private final SubscriptionRepository subscriptionRepository;
 
 	// Method that returns all the students
 	public List<StudentResponseDTO> getAllStudents() {
@@ -101,6 +106,15 @@ public class StudentService {
 
 		inscriptionRepository.findByStudentAndRoute(student, route)
 				.orElseThrow(() -> new ResourceNotFoundException("Inscription not found."));
+
+		Subscription subscription = subscriptionRepository.findById(student.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Subscription not found."));
+
+		Plan plan = subscription.getPlan();
+
+		if(plan.getType().equals("Gratis") && !project.getLevel().equals(1)){
+			throw new InsufficientSubscriptionPlan();
+		} 
 
 		List<Requirement> requirements = requirementRepository.findAllByProject(project);
 
