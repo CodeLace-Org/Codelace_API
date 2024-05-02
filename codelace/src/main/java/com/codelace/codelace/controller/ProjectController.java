@@ -1,9 +1,9 @@
 package com.codelace.codelace.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
 import com.codelace.codelace.model.dto.ProjectResponseDTO;
+import com.codelace.codelace.model.dto.ResourceRespondDTO;
 import com.codelace.codelace.service.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +50,12 @@ public class ProjectController {
 	public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
 		projectService.deleteProject(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	@GetMapping("/{id}/resources")
+	public ResponseEntity< List<ResourceRespondDTO>> getResourcesByProject(@PathVariable Long id){
+		List<ResourceRespondDTO> reources = projectService.getResourcesByProject(id);
+		return new ResponseEntity<>(reources, HttpStatus.OK);
 	}
 
 }
