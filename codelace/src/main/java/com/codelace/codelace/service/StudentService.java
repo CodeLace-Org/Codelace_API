@@ -1,6 +1,5 @@
 package com.codelace.codelace.service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class StudentService {
 	// Instance mapper
-    private final StudentMapper studentMapper;
+	private final StudentMapper studentMapper;
 
 	// Instances of repositories
 	private final StudentRepository studentRepository;
@@ -40,50 +39,54 @@ public class StudentService {
 	private final RequirementRepository requirementRepository;
 	private final ProgressRepository progressRepository;
 
-    // Method that returns all the students
-    public List<StudentResponseDTO> getAllStudents() {
-        List<Student> students = studentRepository.findAll();
-        return studentMapper.convertToListDTO(students);
-    }
+	// Method that returns all the students
+	public List<StudentResponseDTO> getAllStudents() {
+		List<Student> students = studentRepository.findAll();
+		return studentMapper.convertToListDTO(students);
+	}
 
-    // Method that returns a student by its id
-    public StudentResponseDTO getStudentById(Long id) {
-        Student student = studentRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Student not found."));
-        return studentMapper.convertStudentToResponse(student);
-    }
+	// Method that returns a student by its id
+	public StudentResponseDTO getStudentById(Long id) {
+		Student student = studentRepository.findById(id)
+				.orElseThrow(
+						() -> new ResourceNotFoundException("Student not found."));
+		return studentMapper.convertStudentToResponse(student);
+	}
 
-    // Method that creates a student
-    public StudentResponseDTO createStudent(StudentRegisterRequestDTO studentRegisterRequestDTO) {
+	// Method that creates a student
+	public StudentResponseDTO createStudent(StudentRegisterRequestDTO studentRegisterRequestDTO) {
 
-        // Retrieving the information from the request
-        String email = studentRegisterRequestDTO.getEmail();
-        String username = studentRegisterRequestDTO.getUsername();
-        String password = studentRegisterRequestDTO.getPwd();
-        String confirmPassword = studentRegisterRequestDTO.getConfirmPassword();
+		// Retrieving the information from the request
+		String email = studentRegisterRequestDTO.getEmail();
+		String username = studentRegisterRequestDTO.getUsername();
+		String password = studentRegisterRequestDTO.getPwd();
+		String confirmPassword = studentRegisterRequestDTO.getConfirmPassword();
 
-        // Validation: checking if the email is already being used, the username is being used or the passwords are different
-        if (studentRepository.findByEmail(email).isPresent()) throw new ResourceDuplicateException("The email address is already in use.");
-        if (studentRepository.findByUsername(username).isPresent()) throw new ResourceDuplicateException("The username is already in use.");
-        if (!password.equals(confirmPassword)) throw new BadRequestException("Passwords do not match.");
+		// Validation: checking if the email is already being used, the username is
+		// being used or the passwords are different
+		if (studentRepository.findByEmail(email).isPresent())
+			throw new ResourceDuplicateException("The email address is already in use.");
+		if (studentRepository.findByUsername(username).isPresent())
+			throw new ResourceDuplicateException("The username is already in use.");
+		if (!password.equals(confirmPassword))
+			throw new BadRequestException("Passwords do not match.");
 
-        // Creating the student and returning its information
-        Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
-        student = studentRepository.save(student);
-        return studentMapper.convertStudentToResponse(student);
+		// Creating the student and returning its information
+		Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
+		student = studentRepository.save(student);
+		return studentMapper.convertStudentToResponse(student);
 
-    }
+	}
 
-    // Method that updates a student / edit profile (TODO)
+	// Method that updates a student / edit profile (TODO)
 
-    // Method that deletes a student
-    public void deleteStudent(Long id) {
-        Student student = studentRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Student not found."));
-        studentRepository.delete(student);
-    }
+	// Method that deletes a student
+	public void deleteStudent(Long id) {
+		Student student = studentRepository.findById(id)
+				.orElseThrow(
+						() -> new ResourceNotFoundException("Student not found."));
+		studentRepository.delete(student);
+	}
 
 	// Method that returns a Project by RequestDTO
 	public ProjectDetailsResponseDTO getDetailsbyStudentAndProject(Long projectId, Long studentId) {
@@ -105,6 +108,13 @@ public class StudentService {
 
 		for (Requirement requirement : requirements) {
 			Progress progress = progressRepository.findByStudentAndRequirement(student, requirement);
+			if (progress == null) {
+				progress = new Progress();
+				progress.setCompleted(false);
+				progress.setStudent(student);
+				progress.setRequirement(requirement);
+				progressRepository.save(progress);
+			}
 
 			ProgressResponseDTO progressResponseDTO = new ProgressResponseDTO();
 
