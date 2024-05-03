@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.ProjectMapper;
+import com.codelace.codelace.mapper.ResourceMapper;
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
 import com.codelace.codelace.model.dto.ProjectResponseDTO;
+import com.codelace.codelace.model.dto.ResourceRespondDTO;
 import com.codelace.codelace.model.entity.Project;
+import com.codelace.codelace.model.entity.Resource;
 import com.codelace.codelace.model.entity.Route;
 import com.codelace.codelace.repository.ProjectRepository;
+import com.codelace.codelace.repository.ResourceRepository;
 import com.codelace.codelace.repository.RouteRepository;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +27,8 @@ public class ProjectService {
 	// Instances of the repositories
 	private final ProjectRepository projectRepository;
 	private final RouteRepository routeRepository;
+	private final ResourceRepository resourceRepository;
+	private final ResourceMapper resourceMapper;
 
 	// Method that returns all the projects
 	public List<ProjectResponseDTO> getAllProjects() {
@@ -52,5 +58,11 @@ public class ProjectService {
 		Project project = projectRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Project not found."));
 		projectRepository.delete(project);
+	}
+
+	public List<ResourceRespondDTO> getResourcesByProject(Long id){
+		Project project = projectRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Not found"));
+		List<Resource> resources = resourceRepository.findAllByProject(project);
+		return resourceMapper.convertToListDTO(resources);
 	}
 }

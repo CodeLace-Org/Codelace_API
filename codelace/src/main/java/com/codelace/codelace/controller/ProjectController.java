@@ -6,6 +6,11 @@ import com.codelace.codelace.model.dto.PostByProjectResponseDTO;
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
 import com.codelace.codelace.model.dto.ProjectResponseDTO;
 import com.codelace.codelace.service.PostService;
+
+import com.codelace.codelace.model.dto.ProjectRequestDTO;
+import com.codelace.codelace.model.dto.ProjectResponseDTO;
+import com.codelace.codelace.model.dto.ResourceRespondDTO;
+
 import com.codelace.codelace.service.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,4 +65,11 @@ public class ProjectController {
 		List<PostByProjectResponseDTO> posts = postService.getPostsByProjectId(id);
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
+
+	@GetMapping("/{id}/resources")
+	public ResponseEntity< List<ResourceRespondDTO>> getResourcesByProject(@PathVariable Long id){
+		List<ResourceRespondDTO> reources = projectService.getResourcesByProject(id);
+		return new ResponseEntity<>(reources, HttpStatus.OK);
+	}
+
 }
