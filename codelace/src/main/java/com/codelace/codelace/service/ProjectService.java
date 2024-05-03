@@ -8,7 +8,7 @@ import com.codelace.codelace.mapper.ProjectMapper;
 import com.codelace.codelace.mapper.ResourceMapper;
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
 import com.codelace.codelace.model.dto.ProjectResponseDTO;
-import com.codelace.codelace.model.dto.ResourceRespondDTO;
+import com.codelace.codelace.model.dto.ResourceResponseDTO;
 import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Resource;
 import com.codelace.codelace.model.entity.Route;
@@ -60,7 +60,7 @@ public class ProjectService {
 		projectRepository.delete(project);
 	}
 
-	public List<ResourceRespondDTO> getResourcesByProject(Long id){
+	public List<ResourceResponseDTO> getResourcesByProject(Long id){
 		Project project = projectRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Not found"));
 		List<Resource> resources = resourceRepository.findAllByProject(project);
 		return resourceMapper.convertToListDTO(resources);

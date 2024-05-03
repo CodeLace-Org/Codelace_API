@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResourceRespondDTO {
+public class ResourceResponseDTO {
     private Long id;
     private String title;
     private String link;
