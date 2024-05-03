@@ -2,7 +2,7 @@ package com.codelace.codelace.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codelace.codelace.model.dto.PostResponseDTO;
+import com.codelace.codelace.model.dto.PostByProjectResponseDTO;
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
 import com.codelace.codelace.model.dto.ProjectResponseDTO;
 import com.codelace.codelace.service.PostService;
@@ -54,9 +54,10 @@ public class ProjectController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
+	//Method that returns all the posts of a project
 	@GetMapping("/{id}/posts")
-	public ResponseEntity<List<PostResponseDTO>> getPostsByProjectId(@PathVariable Long id){
-		List<PostResponseDTO> posts = postService.getPostsByProjectId(id);
+	public ResponseEntity<List<PostByProjectResponseDTO>> getPostsByProjectId(@PathVariable Long id){
+		List<PostByProjectResponseDTO> posts = postService.getPostsByProjectId(id);
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 }
