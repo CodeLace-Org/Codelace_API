@@ -105,7 +105,8 @@ public class StudentService {
 			throw new ResourceDuplicateException("The username is already in use.");
 		if(!password.equals(confirmPassword))
 			throw new BadRequestException("Passwords do not match.");
-		
+		if(profile_picture == null) profile_picture = student.getProfile_picture();
+
 		student.setEmail(email);
 		student.setUsername(username);
 		student.setPwd(password);

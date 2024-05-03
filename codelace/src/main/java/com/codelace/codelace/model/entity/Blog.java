@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,12 +22,16 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="title", nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name="content", nullable = false)
+    @Column(name = "content", nullable = false)
     private String content;
     
-    @Column(name="image")
+    @Column(name = "image")
     private byte[] image;
+
+    @ManyToOne
+    @JoinColumn(name = "projects_id", nullable = false)
+    private Project project;
 }
