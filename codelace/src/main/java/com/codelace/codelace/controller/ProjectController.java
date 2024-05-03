@@ -6,9 +6,6 @@ import com.codelace.codelace.model.dto.PostByProjectResponseDTO;
 import com.codelace.codelace.model.dto.ProjectRequestDTO;
 import com.codelace.codelace.model.dto.ProjectResponseDTO;
 import com.codelace.codelace.service.PostService;
-
-import com.codelace.codelace.model.dto.ProjectRequestDTO;
-import com.codelace.codelace.model.dto.ProjectResponseDTO;
 import com.codelace.codelace.model.dto.ResourceRespondDTO;
 
 import com.codelace.codelace.service.ProjectService;
@@ -25,8 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/projects")
 @AllArgsConstructor
+@RequestMapping("/projects")
 public class ProjectController {
 
 	private final ProjectService projectService;
@@ -71,5 +68,4 @@ public class ProjectController {
 		List<ResourceRespondDTO> reources = projectService.getResourcesByProject(id);
 		return new ResponseEntity<>(reources, HttpStatus.OK);
 	}
-
 }

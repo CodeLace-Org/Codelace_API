@@ -12,8 +12,7 @@ import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
-import com.codelace.codelace.model.dto.RouteRequestDTO;
-import com.codelace.codelace.model.dto.RouteResponseDTO;
+
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
