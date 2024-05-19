@@ -9,6 +9,7 @@ import com.codelace.codelace.exception.BadRequestException;
 import com.codelace.codelace.exception.InsufficientSubscriptionPlan;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
+import com.codelace.codelace.mapper.ProgressMapper;
 import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
@@ -44,6 +45,7 @@ public class StudentService {
 	private final InscriptionRepository inscriptionRepository;
 	private final RequirementRepository requirementRepository;
 	private final ProgressRepository progressRepository;
+	private final ProgressMapper progressMapper;
 	private final SubscriptionRepository subscriptionRepository;
 
 	// Method that returns all the students
@@ -150,30 +152,30 @@ public class StudentService {
 
 		List<Requirement> requirements = requirementRepository.findAllByProject(project);
 
-		List<ProgressResponseDTO> progressResponseDTOList = new ArrayList<>();
-
-		for (Requirement requirement : requirements) {
-			Progress progress = progressRepository.findByStudentAndRequirement(student, requirement);
-			if (progress == null) {
-				progress = new Progress();
-				progress.setCompleted(false);
-				progress.setStudent(student);
-				progress.setRequirement(requirement);
-				progressRepository.save(progress);
-			}
-
-			ProgressResponseDTO progressResponseDTO = new ProgressResponseDTO();
-
-			progressResponseDTO.setId(progress.getId());
-			progressResponseDTO.setCompleted(progress.getCompleted());
-			progressResponseDTO.setDescription(requirement.getDescription());
-
-			progressResponseDTOList.add(progressResponseDTO);
-		}
+		List<ProgressResponseDTO> progressResponseDTOList =
+			requirements.stream()
+				.map(requirement -> getStudentProgressByRequirement(student, requirement))
+				.toList();
 
 		ProjectDetailsResponseDTO projectDetailsResponseDTO = studentMapper.convertProjectToResponse(project);
 		projectDetailsResponseDTO.setProgress(progressResponseDTOList);
 
 		return projectDetailsResponseDTO;
+	}
+	
+	public ProgressResponseDTO getStudentProgressByRequirement(Student student, Requirement requirement){
+		Progress progress = progressRepository.findByStudentAndRequirement(student, requirement);
+		if (progress == null) {
+			progress = new Progress();
+			progress.setCompleted(false);
+			progress.setStudent(student);
+			progress.setRequirement(requirement);
+			progressRepository.save(progress);
+		}
+
+		ProgressResponseDTO progressResponseDTO = progressMapper.convertProgressToResponseDTO(progress);
+		progressResponseDTO.setDescription(requirement.getDescription());
+
+		return progressResponseDTO;
 	}
 }
