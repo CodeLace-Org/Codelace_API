@@ -9,6 +9,7 @@ import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Resource;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
-	Optional<Resource> findById(Long id);
+	Optional<Resource> findById(Optional<Long> id);
+
 	List<Resource> findAllByProject(Project project);
 }

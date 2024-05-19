@@ -12,7 +12,6 @@ import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
-
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
@@ -89,7 +88,7 @@ public class StudentService {
 	public StudentResponseDTO updateStudent(Long id, StudentUpdateRequestDTO studentUpdateRequestDTO) {
 		Student student = studentRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found."));
-		
+
 		String email = studentUpdateRequestDTO.getEmail();
 		String username = studentUpdateRequestDTO.getUsername();
 		String password = studentUpdateRequestDTO.getPwd();
@@ -98,13 +97,14 @@ public class StudentService {
 		String status = studentUpdateRequestDTO.getStatus();
 		byte[] profile_picture = studentUpdateRequestDTO.getProfile_picture();
 
-		if(!email.equals(student.getEmail()) && studentRepository.findByEmail(email).isPresent())
+		if (!email.equals(student.getEmail()) && studentRepository.findByEmail(email).isPresent())
 			throw new ResourceDuplicateException("The email address is already in use.");
-		if(!username.equals(student.getUsername()) && studentRepository.findByUsername(username).isPresent())
+		if (!username.equals(student.getUsername()) && studentRepository.findByUsername(username).isPresent())
 			throw new ResourceDuplicateException("The username is already in use.");
-		if(!password.equals(confirmPassword))
+		if (!password.equals(confirmPassword))
 			throw new BadRequestException("Passwords do not match.");
-		if(profile_picture == null) profile_picture = student.getProfile_picture();
+		if (profile_picture == null)
+			profile_picture = student.getProfile_picture();
 
 		student.setEmail(email);
 		student.setUsername(username);
@@ -112,7 +112,7 @@ public class StudentService {
 		student.setDescription(description);
 		student.setStatus(status);
 		student.setProfile_picture(profile_picture);
-		//student.setProfile_picture(studentUpdateRequestDTO.getProfile_picture());
+		// student.setProfile_picture(studentUpdateRequestDTO.getProfile_picture());
 		studentRepository.save(student);
 		return studentMapper.convertStudentToResponse(student);
 	}
@@ -144,9 +144,9 @@ public class StudentService {
 
 		Plan plan = subscription.getPlan();
 
-		if(plan.getType().equals("Gratis") && !project.getLevel().equals(1)){
+		if (plan.getType().equals("Gratis") && !project.getLevel().equals(1)) {
 			throw new InsufficientSubscriptionPlan();
-		} 
+		}
 
 		List<Requirement> requirements = requirementRepository.findAllByProject(project);
 
