@@ -1,5 +1,6 @@
-package com.codelace.codelace.services;
+package com.codelace.codelace.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,8 +18,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.codelace.codelace.exception.MaxFreeInscriptionException;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
+import com.codelace.codelace.exception.SubscriptionNotActiveException;
 import com.codelace.codelace.mapper.InscriptionMapper;
 import com.codelace.codelace.model.dto.InscriptionRequestDTO;
 import com.codelace.codelace.model.dto.InscriptionResponseDTO;
@@ -134,11 +137,6 @@ public class InscriptionServiceTest {
         Student student = new Student();
         student.setId(1L);
 
-        Inscription inscription = new Inscription();
-        inscription.setId(1L);
-        inscription.setRoute(route);
-        inscription.setStudent(student);
-
         Plan plan = new Plan();
         plan.setId(1L);
         plan.setType("Gratis");
@@ -157,6 +155,10 @@ public class InscriptionServiceTest {
         when(inscriptionRepository.findByStudent(student)).thenReturn(Optional.empty());
 
         // Mocking mapper
+        Inscription inscription = new Inscription();
+        inscription.setId(1L);
+        inscription.setRoute(route);
+        inscription.setStudent(student);
         when(inscriptionMapper.convertInscriptionRequestToEntity(requestDTO)).thenReturn(inscription);
 
         // Mocking repository
@@ -296,5 +298,119 @@ public class InscriptionServiceTest {
         verify(routeRepository, times(1)).findById(1L);
         verify(inscriptionRepository, times(1)).findByStudentAndRoute(student, route);
         verify(subscriptionRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    public void testCreateInscription_SubscriptionNotActive(){
+        // Arrange
+        InscriptionRequestDTO requestDTO = new InscriptionRequestDTO();
+        requestDTO.setRoute(1L);
+        requestDTO.setStudent(1L);
+
+        Route route = new Route();
+        route.setId(1L);
+        route.setDescription("description");
+        route.setIcon("icon");
+        route.setName("route name");
+
+        Student student = new Student();
+        student.setId(1L);
+
+        Inscription inscription = new Inscription();
+        inscription.setId(1L);
+        inscription.setRoute(route);
+        inscription.setStudent(student);
+
+        Plan plan = new Plan();
+        plan.setId(1L);
+        plan.setType("Gratis");
+
+        Subscription subscription = new Subscription();
+        subscription.setId(1L);
+        subscription.setActive(false);
+        subscription.setPlan(plan);
+        subscription.setStudent(student);
+
+        // Mocking repository
+        when(studentRepository.findById(requestDTO.getStudent())).thenReturn(Optional.of(student));
+        when(routeRepository.findById(requestDTO.getRoute())).thenReturn(Optional.of(route));
+        when(inscriptionRepository.findByStudentAndRoute(student, route)).thenReturn(Optional.empty());
+        when(subscriptionRepository.findById(student.getId())).thenReturn(Optional.of(subscription));
+
+        // Act & Assert
+        assertThrows(SubscriptionNotActiveException.class, () -> inscriptionService.createInscription(requestDTO));
+
+        verify(studentRepository, times(1)).findById(1L);
+        verify(routeRepository, times(1)).findById(1L);
+        verify(inscriptionRepository, times(1)).findByStudentAndRoute(student, route);
+        verify(subscriptionRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    public void testCreateInscription_MaxFreeInscription(){
+        // Arrange
+        InscriptionRequestDTO requestDTO = new InscriptionRequestDTO();
+        requestDTO.setRoute(1L);
+        requestDTO.setStudent(1L);
+
+        Route route = new Route();
+        route.setId(1L);
+        route.setDescription("description");
+        route.setIcon("icon");
+        route.setName("route name");
+
+        Student student = new Student();
+        student.setId(1L);
+
+        Inscription inscription = new Inscription();
+        inscription.setId(1L);
+        inscription.setRoute(route);
+        inscription.setStudent(student);
+
+        Plan plan = new Plan();
+        plan.setId(1L);
+        plan.setType("Gratis");
+
+        Subscription subscription = new Subscription();
+        subscription.setId(1L);
+        subscription.setActive(true);
+        subscription.setPlan(plan);
+        subscription.setStudent(student);
+
+        // Mocking repository
+        when(studentRepository.findById(requestDTO.getStudent())).thenReturn(Optional.of(student));
+        when(routeRepository.findById(requestDTO.getRoute())).thenReturn(Optional.of(route));
+        when(inscriptionRepository.findByStudentAndRoute(student, route)).thenReturn(Optional.empty());
+        when(subscriptionRepository.findById(student.getId())).thenReturn(Optional.of(subscription));
+        when(inscriptionRepository.findByStudent(student)).thenReturn(Optional.of(inscription));
+
+        assertThrows(MaxFreeInscriptionException.class, () -> inscriptionService.createInscription(requestDTO));
+    }
+
+    @Test
+    public void testDeleteInscription_SuccessfullDelete(){
+        // Arrange
+        Long id = 1L;
+        Inscription inscription = new Inscription();
+        inscription.setId(id);
+
+        when(inscriptionRepository.findById(id)).thenReturn(Optional.of(inscription));
+
+        // Act
+        assertDoesNotThrow(() -> inscriptionService.deleteInscription(id));
+
+        // Assert
+        verify(inscriptionRepository, times(1)).delete(inscription);
+    }
+
+    @Test
+    public void testDeleteInscription_InscriptionNotFound(){
+        // Arrange
+        Long id = 1L;
+
+        when(inscriptionRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> inscriptionService.deleteInscription(id));
     }
 }
