@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,21 +18,31 @@ import com.codelace.codelace.service.PostService;
 
 import lombok.AllArgsConstructor;
 
+
 @RestController
 @RequestMapping("/posts")
 @AllArgsConstructor
 public class PostController {
 	private final PostService postService;
 
-    @GetMapping
-    public ResponseEntity<List<PostResponseDTO>> getAllPosts(){
-        List<PostResponseDTO> posts = postService.getAllPosts();
-        return new ResponseEntity<>(posts, HttpStatus.OK);
-    }
+	// ---------------------------- ENDPOINTS (CRUD)
+	@GetMapping
+	public ResponseEntity<List<PostResponseDTO>> getAllPosts() {
+		List<PostResponseDTO> posts = postService.getAllPosts();
+		return new ResponseEntity<>(posts, HttpStatus.OK);
+	}
 
-    @PostMapping
-    public ResponseEntity<PostResponseDTO> createPost(@Validated @RequestBody PostRequestDTO postDTO){
-        PostResponseDTO createdPost = postService.createPost(postDTO);
-        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<PostResponseDTO> createPost(@Validated @RequestBody PostRequestDTO postDTO) {
+		PostResponseDTO createdPost = postService.createPost(postDTO);
+		return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+	}
+
+	// ---------------------------- ENDPOINTS
+	@GetMapping("/students/{student_id}")
+	public ResponseEntity<List<PostResponseDTO>> getPostsByStudent(@PathVariable Long student_id) {
+		List<PostResponseDTO> response = postService.getPostsByStudent(student_id);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
 }
