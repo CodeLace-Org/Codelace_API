@@ -170,7 +170,7 @@ public class StudentService {
 			progress.setCompleted(false);
 			progress.setStudent(student);
 			progress.setRequirement(requirement);
-			progressRepository.save(progress);
+			progress = progressRepository.save(progress);
 		}
 
 		ProgressResponseDTO progressResponseDTO = progressMapper.convertProgressToResponseDTO(progress);
