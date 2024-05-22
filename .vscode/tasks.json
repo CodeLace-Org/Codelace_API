@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Maven Build (Tests)",
+			"type": "shell",
+			"command": "mvn",
+			"args": [
+				"jacoco:prepare-agent",
+				"test",
+				"install",
+				"jacoco:report"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"options": {
+				"cwd": "${workspaceFolder}/codelace"
+			}
+		},
+		{
+			"label": "Open index.html with default browser",
+			"type": "shell",
+			"command": "start",
+			"args": [
+				"index.html"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/codelace/target/site/jacoco/"
+			},
+			"dependsOn": "Maven Build (Tests)"
+		}
+	]
+}
