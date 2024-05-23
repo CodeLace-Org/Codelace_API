@@ -34,7 +34,6 @@ import com.codelace.codelace.repository.InscriptionRepository;
 import com.codelace.codelace.repository.RouteRepository;
 import com.codelace.codelace.repository.StudentRepository;
 import com.codelace.codelace.repository.SubscriptionRepository;
-import com.codelace.codelace.service.InscriptionService;
 
 @ExtendWith(MockitoExtension.class)
 public class InscriptionServiceTest {
