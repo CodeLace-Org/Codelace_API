@@ -28,13 +28,13 @@ public class ResourceService {
     }
 
     public ResourceResponseDTO getResourceById(Long id){
-        Resource resource = resourceRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Resource not fount"));
+        Resource resource = resourceRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Resource not found"));
         return resourceMapper.convertToDTO(resource);
     }
 
     public ResourceResponseDTO createResource(ResourceRequestDTO resourceRequestDto) {
         Resource resource = resourceMapper.convertToEntity(resourceRequestDto);
-        Project project = projectRepository.findById(resourceRequestDto.getProject()).orElseThrow(()->new ResourceNotFoundException("Not found"));
+        Project project = projectRepository.findById(resourceRequestDto.getProject()).orElseThrow(()->new ResourceNotFoundException("Project Not found"));
         resource.setProject(project);
         resourceRepository.save(resource);
         return resourceMapper.convertToDTO(resource);
