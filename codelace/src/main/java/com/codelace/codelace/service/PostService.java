@@ -62,11 +62,9 @@ public class PostService {
 
 	// Method that returns a list of post by student id
 	public List<PostResponseDTO> getPostsByStudent(Long id_student) {
-		Student student = studentRepository
-				.findById(id_student)
+		Student student = studentRepository.findById(id_student)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found with id " + id_student));
-		List<Post> posts = postRepository
-				.findAllByStudent(student)
+		List<Post> posts = postRepository.findAllByStudent(student)
 				.orElseThrow(() -> new ResourceNotFoundException("Posts not found for student with id " + id_student));
 		return postMapper.convertToListDTO(posts);
 	}
