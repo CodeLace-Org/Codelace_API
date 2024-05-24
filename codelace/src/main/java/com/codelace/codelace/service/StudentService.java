@@ -14,6 +14,7 @@ import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.codelace.codelace.model.entity.Plan;
 import com.codelace.codelace.model.entity.Progress;
@@ -92,28 +93,39 @@ public class StudentService {
 
 		String email = studentUpdateRequestDTO.getEmail();
 		String username = studentUpdateRequestDTO.getUsername();
-		String password = studentUpdateRequestDTO.getPwd();
-		String confirmPassword = studentUpdateRequestDTO.getConfirmPassword();
 		String description = studentUpdateRequestDTO.getDescription();
 		String status = studentUpdateRequestDTO.getStatus();
-		byte[] profile_picture = studentUpdateRequestDTO.getProfile_picture();
 
 		if (!email.equals(student.getEmail()) && studentRepository.findByEmail(email).isPresent())
 			throw new ResourceDuplicateException("The email address is already in use.");
 		if (!username.equals(student.getUsername()) && studentRepository.findByUsername(username).isPresent())
 			throw new ResourceDuplicateException("The username is already in use.");
-		if (!password.equals(confirmPassword))
-			throw new BadRequestException("Passwords do not match.");
-		if (profile_picture == null)
-			profile_picture = student.getProfile_picture();
 
 		student.setEmail(email);
 		student.setUsername(username);
-		student.setPwd(password);
 		student.setDescription(description);
 		student.setStatus(status);
-		student.setProfile_picture(profile_picture);
 		// student.setProfile_picture(studentUpdateRequestDTO.getProfile_picture());
+		studentRepository.save(student);
+		return studentMapper.convertStudentToResponse(student);
+	}
+
+	public StudentResponseDTO updateStudentPassword(Long id, StudentUpdatePasswordRequestDTO studentUpdatePasswordRequestDTO){
+		Student student = studentRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Student not found."));
+		String pwd = studentUpdatePasswordRequestDTO.getPwd();
+		String current_pwd = student.getPwd();
+
+		if(!pwd.equals(current_pwd))
+			throw new BadRequestException("Current passwords do not match.");
+
+		String new_pwd = studentUpdatePasswordRequestDTO.getNewPassword();
+		String confirm_pwd = studentUpdatePasswordRequestDTO.getConfirmPassword();
+		
+		if (!new_pwd.equals(confirm_pwd))
+			throw new BadRequestException("New passwords do not match.");
+
+		student.setPwd(new_pwd);
 		studentRepository.save(student);
 		return studentMapper.convertStudentToResponse(student);
 	}
