@@ -105,11 +105,11 @@ public class StudentService {
 		student.setUsername(username);
 		student.setDescription(description);
 		student.setStatus(status);
-		// student.setProfile_picture(studentUpdateRequestDTO.getProfile_picture());
 		studentRepository.save(student);
 		return studentMapper.convertStudentToResponse(student);
 	}
 
+	// Method that updates a student password
 	public StudentResponseDTO updateStudentPassword(Long id, StudentUpdatePasswordRequestDTO studentUpdatePasswordRequestDTO){
 		Student student = studentRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found."));
