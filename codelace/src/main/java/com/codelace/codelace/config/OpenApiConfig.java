@@ -28,9 +28,9 @@ public class OpenApiConfig {
 
         // Información de contacto
         Contact contact = new Contact();
-        contact.setEmail("h4ampcode@gmail.com");
-        contact.setName("HampCode");
-        contact.setUrl("https://www.hampcode.com");
+        contact.setEmail("u202110764@upc.edu.pe");
+        contact.setName("CodeLace");
+        contact.setUrl("https://www.codelace.com");
 
         // Licencia
         License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
