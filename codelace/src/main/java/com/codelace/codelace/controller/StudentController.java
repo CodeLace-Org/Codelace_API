@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
+import com.codelace.codelace.model.dto.StudentRegisterResponseDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
@@ -47,9 +48,9 @@ public class StudentController {
 
 	// Method that creates a student
 	@PostMapping
-	public ResponseEntity<StudentResponseDTO> createStudent(
+	public ResponseEntity<StudentRegisterResponseDTO> createStudent(
 			@Validated @RequestBody StudentRegisterRequestDTO studentRegisterRequestDTO) {
-		StudentResponseDTO student = studentService.createStudent(studentRegisterRequestDTO);
+		StudentRegisterResponseDTO student = studentService.createStudent(studentRegisterRequestDTO);
 		return new ResponseEntity<>(student, HttpStatus.CREATED);
 	}
 

@@ -13,9 +13,11 @@ import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
+import com.codelace.codelace.model.dto.StudentRegisterResponseDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
 import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
+import com.codelace.codelace.model.dto.SubscriptionResponseDTO;
 import com.codelace.codelace.model.entity.Plan;
 import com.codelace.codelace.model.entity.Progress;
 import com.codelace.codelace.model.entity.Project;
@@ -47,6 +49,9 @@ public class StudentService {
 	private final ProgressMapper progressMapper;
 	private final SubscriptionRepository subscriptionRepository;
 
+	// Instances of services
+	private final SubscriptionService subscriptionService;
+
 	// Method that returns all the students
 	public List<StudentResponseDTO> getAllStudents() {
 		List<Student> students = studentRepository.findAll();
@@ -62,7 +67,7 @@ public class StudentService {
 	}
 
 	// Method that creates a student
-	public StudentResponseDTO createStudent(StudentRegisterRequestDTO studentRegisterRequestDTO) {
+	public StudentRegisterResponseDTO createStudent(StudentRegisterRequestDTO studentRegisterRequestDTO) {
 
 		// Retrieving the information from the request
 		String email = studentRegisterRequestDTO.getEmail();
@@ -82,7 +87,13 @@ public class StudentService {
 		// Creating the student and returning its information
 		Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
 		student = studentRepository.save(student);
-		return studentMapper.convertStudentToResponse(student);
+
+		SubscriptionResponseDTO subscriptionDTO = subscriptionService.createSubscription(student);
+
+		StudentRegisterResponseDTO responseDTO = studentMapper.convertStudentToRegisterResponseDTO(student);
+		responseDTO.setSubscription(subscriptionDTO);
+
+		return responseDTO;
 
 	}
 
