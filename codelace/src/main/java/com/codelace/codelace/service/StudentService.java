@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codelace.codelace.exception.BadRequestException;
-import com.codelace.codelace.exception.InsufficientSubscriptionPlan;
+import com.codelace.codelace.exception.InsufficientSubscriptionPlanException;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.ProgressMapper;
@@ -169,7 +169,7 @@ public class StudentService {
 		Plan plan = subscription.getPlan();
 
 		if (plan.getType().equals("Gratis") && !project.getLevel().equals(1)) {
-			throw new InsufficientSubscriptionPlan();
+			throw new InsufficientSubscriptionPlanException();
 		}
 
 		List<Requirement> requirements = requirementRepository.findAllByProject(project);

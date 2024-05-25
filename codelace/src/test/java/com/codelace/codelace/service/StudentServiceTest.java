@@ -22,7 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.codelace.codelace.exception.BadRequestException;
-import com.codelace.codelace.exception.InsufficientSubscriptionPlan;
+import com.codelace.codelace.exception.InsufficientSubscriptionPlanException;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.ProgressMapper;
@@ -878,7 +878,7 @@ public class StudentServiceTest {
         when(subscriptionRepository.findById(studentId)).thenReturn(Optional.of(subscription));
 
         // Assert
-        assertThrows(InsufficientSubscriptionPlan.class, () -> studentService.getDetailsbyStudentAndProject(projectId, studentId));
+        assertThrows(InsufficientSubscriptionPlanException.class, () -> studentService.getDetailsbyStudentAndProject(projectId, studentId));
         
         // Verify
         verify(studentRepository, times(1)).findById(studentId);
