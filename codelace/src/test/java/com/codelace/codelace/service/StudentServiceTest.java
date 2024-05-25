@@ -29,7 +29,10 @@ import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
+//import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
+import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
 import com.codelace.codelace.model.entity.Inscription;
 import com.codelace.codelace.model.entity.Plan;
 import com.codelace.codelace.model.entity.Progress;
@@ -264,6 +267,300 @@ public class StudentServiceTest {
         verify(studentRepository, times(1)).findByEmail(requestDTO.getEmail());
         verify(studentRepository, times(1)).findByUsername(requestDTO.getUsername());
     
+    }
+
+    @Test
+    public void testUpdateStudent_Successfull(){
+                
+        // Arrange
+        Long id = 1L;
+        Student student = new Student();
+        student.setId(id);
+        student.setEmail("pepito123@gmail.com");
+        student.setUsername("pepito123");
+        student.setDescription("Mi nombre es pepito123 y soy un estudiante de programación.");
+        student.setStatus("Me llamo pepito123");
+
+        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+
+        StudentUpdateRequestDTO requestDTO = new StudentUpdateRequestDTO();
+        requestDTO.setEmail("pepito360@gmail.com");
+        requestDTO.setUsername("pepito360");
+        requestDTO.setDescription("Mi nombre es pepito y soy un estudiante de programación.");
+        requestDTO.setStatus("Me llamo pepito");
+
+        when(studentRepository.findByEmail(requestDTO.getEmail())).thenReturn(Optional.empty());
+        when(studentRepository.findByUsername(requestDTO.getUsername())).thenReturn(Optional.empty());
+
+        Student updatedStudent = new Student();
+        updatedStudent.setId(id);
+        updatedStudent.setEmail(requestDTO.getEmail());
+        updatedStudent.setUsername(requestDTO.getUsername());
+        updatedStudent.setDescription(requestDTO.getDescription());
+        updatedStudent.setStatus(requestDTO.getStatus());
+
+        when(studentRepository.save(updatedStudent)).thenReturn(updatedStudent);
+        
+        StudentResponseDTO responseDTO = new StudentResponseDTO();
+        responseDTO.setId(updatedStudent.getId());
+        responseDTO.setUsername(updatedStudent.getUsername());
+        responseDTO.setDescription(updatedStudent.getDescription());
+        responseDTO.setStatus(updatedStudent.getStatus());
+
+        when(studentMapper.convertStudentToResponse(updatedStudent)).thenReturn(responseDTO);
+
+        // Act
+        StudentResponseDTO result = studentService.updateStudent(id, requestDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(updatedStudent.getId(), result.getId());
+
+        // Verify
+        verify(studentRepository, times(1)).findById(id);
+        verify(studentRepository, times(1)).findByEmail(requestDTO.getEmail());
+        verify(studentRepository, times(1)).findByUsername(requestDTO.getUsername());
+        verify(studentRepository, times(1)).save(updatedStudent);
+        verify(studentMapper, times(1)).convertStudentToResponse(updatedStudent);
+        
+    }
+
+    @Test
+    public void testUpdateStudent_StudentNotFound(){
+            
+            // Arrange
+            Long id = 1L;
+    
+            when(studentRepository.findById(id)).thenReturn(Optional.empty());
+    
+            StudentUpdateRequestDTO requestDTO = new StudentUpdateRequestDTO();
+
+            // Assert
+            assertThrows(ResourceNotFoundException.class, () -> studentService.updateStudent(id, requestDTO));
+
+            // Verify
+            verify(studentRepository, times(1)).findById(id);
+    }
+
+    @Test
+    public void testUpdateStudent_EmailInUse(){
+    
+            // Arrange
+            Long id = 1L;
+            Student student = new Student();
+            student.setId(id);
+            student.setUsername("pablito123");
+            student.setEmail("pablito123@gmail.com");
+            student.setDescription("Mi nombre es pablito123 y soy un estudiante de programación.");
+            student.setStatus("Me llamo pablito123");
+
+            when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+
+            Student student_exist = new Student();
+            student_exist.setEmail("paquito360@gmail.com");
+            student_exist.setUsername("paquito360");
+            student_exist.setDescription("Mi nombre es paquito360 y soy un estudiante de programación.");
+            student_exist.setStatus("Me llamo paquito360");
+   
+            StudentUpdateRequestDTO requestDTO = new StudentUpdateRequestDTO();
+            requestDTO.setUsername(student.getUsername());
+            requestDTO.setEmail("paquito360@gmail.com");
+            requestDTO.setDescription(student.getDescription());
+            requestDTO.setStatus("Me llamo pablito360");
+
+            when(studentRepository.findByEmail(requestDTO.getEmail())).thenReturn(Optional.of(student_exist));
+
+            // Act & Assert
+            assertThrows(ResourceDuplicateException.class, () -> studentService.updateStudent(id, requestDTO));
+
+            // Verify
+            verify(studentRepository, times(1)).findById(id);
+            verify(studentRepository, times(1)).findByEmail(requestDTO.getEmail());
+
+    }
+
+    @Test
+    public void testUpdateStudent_UsernameInUse(){
+    
+            // Arrange
+            Long id = 1L;
+            Student student = new Student();
+            student.setId(id);
+            student.setUsername("pablito123");
+            student.setEmail("pablito123@gmail.com");
+            student.setDescription("Mi nombre es pablito123 y soy un estudiante de programación.");
+            student.setStatus("Me llamo pablito123");
+
+            when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+
+            Student student_exist = new Student();
+            student_exist.setUsername("paquitogod360");
+            student_exist.setEmail("paquito720@gmail.com");
+            student_exist.setDescription("Mi nombre es paquitogod360 y soy un estudiante de programación.");
+            student_exist.setStatus("Me llamo paquitogod360");
+
+            StudentUpdateRequestDTO requestDTO = new StudentUpdateRequestDTO();
+            requestDTO.setUsername("paquitogod360");
+            requestDTO.setEmail(student.getEmail());
+            requestDTO.setDescription(student.getDescription());
+            requestDTO.setStatus(student.getStatus());
+
+            when(studentRepository.findByUsername(requestDTO.getUsername())).thenReturn(Optional.of(student_exist));
+
+            // Act & Assert
+            assertThrows(ResourceDuplicateException.class, () -> studentService.updateStudent(id, requestDTO));
+
+            // Verify
+            verify(studentRepository, times(1)).findById(id);
+            verify(studentRepository, times(1)).findByUsername(requestDTO.getUsername());
+    }
+
+    @Test
+    public void testUpdateStudent_EmailAndUserEquals(){
+        
+        // Arrange
+        Long id = 1L;
+        Student student = new Student();
+        student.setId(id);
+        student.setUsername("pablito123");
+        student.setEmail("pablito123@gmail.com");
+        student.setDescription("Mi nombre es pablito123 y soy un estudiante de programación.");
+        student.setStatus("Me llamo pablito123");
+
+        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+
+        StudentUpdateRequestDTO requestDTO = new StudentUpdateRequestDTO();
+        requestDTO.setUsername(student.getUsername());
+        requestDTO.setEmail(student.getEmail());
+        requestDTO.setDescription("Me llamo pablito 123");
+        requestDTO.setStatus("Me llamo pablito123");
+
+        Student updatedStudent = new Student();
+        updatedStudent.setId(id);
+        updatedStudent.setUsername(requestDTO.getUsername());
+        updatedStudent.setEmail(requestDTO.getEmail());
+        updatedStudent.setDescription(requestDTO.getDescription());
+        updatedStudent.setStatus(requestDTO.getStatus());
+
+        when(studentRepository.save(updatedStudent)).thenReturn(updatedStudent);
+
+        StudentResponseDTO responseDTO = new StudentResponseDTO();
+        responseDTO.setId(updatedStudent.getId());
+        responseDTO.setUsername(updatedStudent.getUsername());
+        responseDTO.setDescription(updatedStudent.getDescription());
+        responseDTO.setStatus(updatedStudent.getStatus());
+
+        when(studentMapper.convertStudentToResponse(updatedStudent)).thenReturn(responseDTO);
+
+        // Act
+        StudentResponseDTO result = studentService.updateStudent(id, requestDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(updatedStudent.getId(), result.getId());
+
+        // Verify
+        verify(studentRepository, times(1)).findById(id);
+        verify(studentRepository, times(1)).save(updatedStudent);
+        verify(studentMapper, times(1)).convertStudentToResponse(updatedStudent);
+
+    }
+
+    @Test
+    public void testUpdateStudentPassword_Successfull(){
+            
+            // Arrange
+            Long id = 1L;
+            Student student = new Student();
+            student.setId(id);
+            student.setUsername("pablito123");
+            student.setEmail("pablito123@gmail.com");
+            student.setPwd("pablitopassword123");
+                
+            when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+
+            StudentUpdatePasswordRequestDTO requestDTO = new StudentUpdatePasswordRequestDTO();
+            requestDTO.setPwd("pablitopassword123");
+            requestDTO.setNewPassword("pablitopassword1234");
+            requestDTO.setConfirmPassword("pablitopassword1234");
+
+            when(studentRepository.save(student)).thenReturn(student);
+
+            // Act
+            assertDoesNotThrow(() -> studentService.updateStudentPassword(id, requestDTO));
+
+            // Verify
+            verify(studentRepository, times(1)).findById(id);
+            verify(studentRepository, times(1)).save(student);
+
+    }
+
+    @Test
+    public void testUpdateStudentPassword_StudentNotFound(){
+        
+        // Arrange
+        Long id = 1L;
+
+        when(studentRepository.findById(id)).thenReturn(Optional.empty());
+
+        StudentUpdatePasswordRequestDTO requestDTO = new StudentUpdatePasswordRequestDTO();
+
+        // Assert
+        assertThrows(ResourceNotFoundException.class, () -> studentService.updateStudentPassword(id, requestDTO));
+
+        // Verify
+        verify(studentRepository, times(1)).findById(id);
+
+    }
+
+    @Test
+    public void testUpdateStudentPassword_NotMatchingPasswords(){
+            
+        // Arrange
+        Long id = 1L;
+        Student student = new Student();
+        student.setId(id);
+        student.setUsername("pablito123");
+        student.setEmail("pablito123@gmail.com");
+        student.setPwd("pablitopassword123");
+                
+        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+
+        StudentUpdatePasswordRequestDTO requestDTO = new StudentUpdatePasswordRequestDTO();
+        requestDTO.setPwd("pablito1234");
+        
+
+        // Assert
+        assertThrows(BadRequestException.class, () -> studentService.updateStudentPassword(id, requestDTO));
+
+        // Verify
+        verify(studentRepository, times(1)).findById(id);
+    }
+
+    @Test
+    public void testUpdateStudentPassword_NotMatchingNewPasswords(){
+            
+        // Arrange
+        Long id = 1L;
+        Student student = new Student();
+        student.setId(id);
+        student.setUsername("pablito123");
+        student.setEmail("pablito123@gmail.com");
+        student.setPwd("pablitopassword123");
+                
+        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+
+        StudentUpdatePasswordRequestDTO requestDTO = new StudentUpdatePasswordRequestDTO();
+        requestDTO.setPwd("pablitopassword123");
+        requestDTO.setNewPassword("pablitocontraseña123");
+        requestDTO.setConfirmPassword("pablitocontraseña1234");
+
+        // Assert
+        assertThrows(BadRequestException.class, () -> studentService.updateStudentPassword(id, requestDTO));
+
+        // Verify
+        verify(studentRepository, times(1)).findById(id);
+
     }
 
     @Test
