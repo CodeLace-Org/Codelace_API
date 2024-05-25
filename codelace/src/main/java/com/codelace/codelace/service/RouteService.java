@@ -20,10 +20,14 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class RouteService {
+	// Instance of repository
 	private final RouteRepository routeRepository;
 	private final ProjectRepository projectRepository;
+
+	// Instance of Mapper
 	private final RouteMapper routeMapper;
 	private final ProjectMapper projectMapper;
+	
 	// Method that returns all the routes
 	public List<RouteResponseDTO> getAllRoutes() {
 		List<Route> routes = routeRepository.findAll();

@@ -29,7 +29,8 @@
 			"options": {
 				"cwd": "${workspaceFolder}/codelace/target/site/jacoco/"
 			},
-			"dependsOn": "Maven Build (Tests)"
+			"dependsOn": "Maven Build (Tests)",
+			"problemMatcher": []
 		}
 	]
 }
