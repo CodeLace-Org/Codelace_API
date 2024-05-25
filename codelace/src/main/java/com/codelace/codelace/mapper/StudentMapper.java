@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Student;
@@ -28,6 +29,10 @@ public class StudentMapper {
     // Request Estudiante Update DTO a Entity
     public Student convertStudentUpdateToEntity(StudentUpdateRequestDTO studentUpdateRequestDTO){
         return modelMapper.map(studentUpdateRequestDTO, Student.class);
+    }
+
+    public Student convertStudentUpdatePasswordToEntity(StudentUpdatePasswordRequestDTO studentUpdatePasswordRequestDTO){
+        return modelMapper.map(studentUpdatePasswordRequestDTO, Student.class);
     }
 
     // Estudiante Entity to response DTO
