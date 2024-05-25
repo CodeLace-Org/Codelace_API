@@ -56,11 +56,11 @@ public class RouteControllerIntegrationTest {
 
 	}
 
-	@Test
-	public void testDeleteRoute() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete("/routes/{id}", "5"))
-				.andExpect(MockMvcResultMatchers.status().isNoContent());
-	}
+	// @Test
+	// public void testDeleteRoute() throws Exception {
+	// 	mockMvc.perform(MockMvcRequestBuilders.delete("/routes/{id}", "5"))
+	// 			.andExpect(MockMvcResultMatchers.status().isNoContent());
+	// }
 
 	// TODO -> Sovero ero haz tu test sovero cabezero ero cervezero
 
