@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.codelace.codelace.exception.BadRequestException;
-import com.codelace.codelace.exception.InsufficientSubscriptionPlan;
+import com.codelace.codelace.exception.InsufficientSubscriptionPlanException;
 import com.codelace.codelace.exception.MaxFreeInscriptionException;
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
@@ -77,13 +77,13 @@ public class RestExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, "The student has already reached the maximum amount of free inscriptions.");
     }
 
-    @ExceptionHandler(InsufficientSubscriptionPlan.class)
-    public ProblemDetail handleInsufficientSubscriptionPlan(InsufficientSubscriptionPlan exception){
+    @ExceptionHandler(InsufficientSubscriptionPlanException.class)
+    public ProblemDetail handleInsufficientSubscriptionPlan(InsufficientSubscriptionPlanException exception){
         return ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, "The student needs a non-free plan to access this content.");
     }
 
     @ExceptionHandler(SubscriptionNotActiveException.class)
     public ProblemDetail handleSubscriptionNotActiveException(SubscriptionNotActiveException exception){
-        return ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, "The student's subsçription is not active.");
+        return ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, "The student's subscription is not active.");
     }
 }
