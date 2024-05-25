@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -29,8 +30,10 @@ import com.codelace.codelace.mapper.StudentMapper;
 import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
+import com.codelace.codelace.model.dto.StudentRegisterResponseDTO;
 //import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
+import com.codelace.codelace.model.dto.SubscriptionResponseDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
 import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
 import com.codelace.codelace.model.entity.Inscription;
@@ -74,6 +77,9 @@ public class StudentServiceTest {
 
     @Mock
     private SubscriptionRepository subscriptionRepository;
+
+    @Mock
+    private SubscriptionService subscriptionService;
 
     @InjectMocks
     private StudentService studentService;
@@ -176,14 +182,25 @@ public class StudentServiceTest {
         when(studentMapper.convertStudentRegisterToEntity(requestDTO)).thenReturn(student);
         when(studentRepository.save(student)).thenReturn(student);
 
-        StudentResponseDTO responseDTO = new StudentResponseDTO();
+        SubscriptionResponseDTO subscription = new SubscriptionResponseDTO();
+        subscription.setId(1L);
+        subscription.setActive(true);
+        subscription.setBeginDate(LocalDate.now());
+        subscription.setEndDate(LocalDate.now().plusMonths(1));
+        subscription.setPlanId(1L);
+        subscription.setPlanType("Gratis");
+
+        StudentRegisterResponseDTO responseDTO = new StudentRegisterResponseDTO();
         responseDTO.setId(student.getId());
         responseDTO.setUsername(student.getUsername());
+        responseDTO.setSubscription(subscription);
 
-        when(studentMapper.convertStudentToResponse(student)).thenReturn(responseDTO);
+        when(subscriptionService.createSubscription(student)).thenReturn(subscription);
+        when(studentMapper.convertStudentToRegisterResponseDTO(student)).thenReturn(responseDTO);
+
 
         // Act
-        StudentResponseDTO result = studentService.createStudent(requestDTO);
+        StudentRegisterResponseDTO result = studentService.createStudent(requestDTO);
 
         // Assert
         assertNotNull(result);
@@ -194,7 +211,7 @@ public class StudentServiceTest {
         verify(studentRepository, times(1)).findByUsername(requestDTO.getUsername());
         verify(studentMapper, times(1)).convertStudentRegisterToEntity(requestDTO);
         verify(studentRepository, times(1)).save(student);
-        verify(studentMapper, times(1)).convertStudentToResponse(student);
+        verify(studentMapper, times(1)).convertStudentToRegisterResponseDTO(student);
 
     }
 
