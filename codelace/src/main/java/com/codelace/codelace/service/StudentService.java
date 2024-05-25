@@ -86,13 +86,13 @@ public class StudentService {
 
 		// Creating the student and returning its information
 		Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
-		student = studentRepository.save(student);
-
+		
 		SubscriptionResponseDTO subscriptionDTO = subscriptionService.createSubscription(student);
 
 		StudentRegisterResponseDTO responseDTO = studentMapper.convertStudentToRegisterResponseDTO(student);
 		responseDTO.setSubscription(subscriptionDTO);
 
+		student = studentRepository.save(student);
 		return responseDTO;
 
 	}

@@ -180,7 +180,6 @@ public class StudentServiceTest {
         student.setPwd(requestDTO.getPwd());
 
         when(studentMapper.convertStudentRegisterToEntity(requestDTO)).thenReturn(student);
-        when(studentRepository.save(student)).thenReturn(student);
 
         SubscriptionResponseDTO subscription = new SubscriptionResponseDTO();
         subscription.setId(1L);
@@ -197,7 +196,7 @@ public class StudentServiceTest {
 
         when(subscriptionService.createSubscription(student)).thenReturn(subscription);
         when(studentMapper.convertStudentToRegisterResponseDTO(student)).thenReturn(responseDTO);
-
+        when(studentRepository.save(student)).thenReturn(student);
 
         // Act
         StudentRegisterResponseDTO result = studentService.createStudent(requestDTO);
