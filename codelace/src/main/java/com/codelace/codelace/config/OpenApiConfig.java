@@ -31,6 +31,7 @@ public class OpenApiConfig {
         contact.setEmail("u202110764@upc.edu.pe");
         contact.setName("CodeLace");
         contact.setUrl("https://www.codelace.com");
+        
 
         // Licencia
         License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
