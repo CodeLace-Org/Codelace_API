@@ -35,7 +35,7 @@ public class PostService {
 
 	// Method that creates a post
 	public PostResponseDTO createPost(PostRequestDTO postRequestDTO) {
-		Post post = postMapper.convertToEntity(postRequestDTO);
+		
 		Project project = projectRepository.findById(postRequestDTO.getProject())
 				.orElseThrow(() -> new ResourceNotFoundException(
 						"Project not found with id " + postRequestDTO.getProject()));
@@ -43,10 +43,18 @@ public class PostService {
 				.orElseThrow(() -> new ResourceNotFoundException(
 						"Student not found with id " + postRequestDTO.getStudent()));
 
+		Post post = postMapper.convertToEntity(postRequestDTO);
 		post.setProject(project);
 		post.setStudent(student);
 		post.setDate(LocalDate.now());
 		postRepository.save(post);
+		return postMapper.convertToDTO(post);
+	}
+
+	public PostResponseDTO getPostByStudentAndProject(Long StudentId, Long ProjectId){
+		Project project = projectRepository.findById(ProjectId).orElseThrow(() -> new ResourceNotFoundException("Project not found with id"));
+		Student student = studentRepository.findById(StudentId).orElseThrow(() -> new ResourceNotFoundException("Student not found with id"));
+		Post post = postRepository.findByStudentAndProject(student, project).orElseThrow(() -> new ResourceNotFoundException("Post not found with StudentId and ProjectId"));
 		return postMapper.convertToDTO(post);
 	}
 

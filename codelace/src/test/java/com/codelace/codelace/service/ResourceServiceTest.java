@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.ResourceMapper;
 import com.codelace.codelace.model.dto.ResourceRequestDTO;
@@ -74,9 +75,16 @@ public class ResourceServiceTest {
         when(resourcerepository.findAll()).thenReturn(resources);
 
         ResourceResponseDTO responseDTO1 = new ResourceResponseDTO();
-        responseDTO1.setId(project1.getId());
+        responseDTO1.setId(resource1.getId());
+        responseDTO1.setTitle(resource1.getTitle());
+        responseDTO1.setLink(resource1.getLink());
+        responseDTO1.setProjectId(project1.getId());
+
         ResourceResponseDTO responseDTO2 = new ResourceResponseDTO();
-        responseDTO2.setId(project2.getId());
+        responseDTO2.setId(resource2.getId());
+        responseDTO2.setTitle(resource2.getTitle());
+        responseDTO2.setLink(resource2.getLink());
+        responseDTO2.setProjectId(project2.getId());
         
         List<ResourceResponseDTO> expectResponse = Arrays.asList(responseDTO1, responseDTO2);
         when(resourcemapper.convertToListDTO(resources)).thenReturn(expectResponse);
@@ -94,15 +102,22 @@ public class ResourceServiceTest {
     public void getResourceByIdTest_ExistingId(){
         Long id = 1L;
 
+        Project project = new Project();
+        project.setId(1L);
+
         Resource resource = new Resource();
         resource.setId(1L);
         resource.setTitle("Resource1");
         resource.setLink("Link.com");
+        resource.setProject(project);
 
         when(resourcerepository.findById(id)).thenReturn(Optional.of(resource));
 
         ResourceResponseDTO responseDTO = new ResourceResponseDTO();
         responseDTO.setId(resource.getId());
+        responseDTO.setTitle(resource.getTitle());
+        responseDTO.setLink(resource.getLink());
+        responseDTO.setProjectId(project.getId());
 
         when(resourcemapper.convertToDTO(resource)).thenReturn(responseDTO);
 
@@ -148,8 +163,8 @@ public class ResourceServiceTest {
         resource.setLink(requestDTO.getLink());
         resource.setProject(project);
 
-        when(resourcerepository.save(resource)).thenReturn(resource);
         when(resourcemapper.convertToEntity(requestDTO)).thenReturn(resource);
+        when(resourcerepository.save(resource)).thenReturn(resource);
         when(resourcemapper.convertToDTO(resource)).thenReturn(new ResourceResponseDTO(resource.getId(), resource.getTitle(), resource.getLink(), resource.getProject().getId()));
         
         ResourceResponseDTO result = resourceservice.createResource(requestDTO);
@@ -158,11 +173,11 @@ public class ResourceServiceTest {
         assertEquals(resource.getId(), result.getId());
         assertEquals(resource.getTitle(), result.getTitle());
         assertEquals(resource.getLink(), result.getLink());
-        assertEquals( resource.getProject().getId(),result.getProjectId());
+        assertEquals(resource.getProject().getId(),result.getProjectId());
 
         verify(projectrepository, times(1)).findById(requestDTO.getProject());
-        verify(resourcerepository, times(1)).save(resource);
         verify(resourcemapper, times(1)).convertToEntity(requestDTO);
+        verify(resourcerepository, times(1)).save(resource);
         verify(resourcemapper, times(1)).convertToDTO(resource);
     }
 
@@ -176,5 +191,30 @@ public class ResourceServiceTest {
         when(projectrepository.findById(requestDTO.getProject())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> resourceservice.createResource(requestDTO));
+    }
+
+    @Test
+    public void createResourceTest_ResourceAlreadyExists(){
+        ResourceRequestDTO requestDTO = new ResourceRequestDTO();
+        requestDTO.setTitle("Project1");
+        requestDTO.setLink("link.com");
+        requestDTO.setProject(1L);
+
+        Project project =  new Project();
+        project.setId(1L);
+
+        Resource resource1 = new Resource();
+        resource1.setId(1L);
+        resource1.setTitle("Project1");
+        resource1.setLink("link.com");
+        resource1.setProject(project);
+
+        when(projectrepository.findById(requestDTO.getProject())).thenReturn(Optional.of(project));
+        when(resourcerepository.findByTitleAndProject(requestDTO.getTitle(), project)).thenReturn(Optional.of(resource1));
+
+        assertThrows(ResourceDuplicateException.class, () -> resourceservice.createResource(requestDTO));
+
+        verify(projectrepository, times(1)).findById(requestDTO.getProject());
+        verify(resourcerepository, times(1)).findByTitleAndProject(requestDTO.getTitle(), project);
     }
 }
