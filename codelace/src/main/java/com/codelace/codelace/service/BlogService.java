@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.BlogMapper;
 import com.codelace.codelace.model.dto.BlogRequestDTO;
@@ -72,7 +73,7 @@ public class BlogService {
         byte[] img = blogRequestDTO.getImage();
 
         if(!blog.getTitle().equals(title) && blogRepository.findByTitle(title).isPresent())
-            throw new ResourceNotFoundException("The title is already in use.");
+            throw new ResourceDuplicateException("The title is already in use.");
 
         if(img == null) img = blog.getImage();
 
