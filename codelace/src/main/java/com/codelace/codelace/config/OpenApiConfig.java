@@ -30,7 +30,7 @@ public class OpenApiConfig {
         Contact contact = new Contact();
         contact.setEmail("u202110764@upc.edu.pe");
         contact.setName("CodeLace");
-        contact.setUrl("https://www.codelace.com");
+        contact.setUrl("https://codelaceco.netlify.app/");
         
 
         // Licencia
@@ -38,11 +38,11 @@ public class OpenApiConfig {
 
         // Información general de la API
         Info info = new Info()
-                .title("Banking API")
+                .title("CodeLace API")
                 .version("1.0")
                 .contact(contact)
                 .description("This API exposes endpoints.")
-                .termsOfService("https://www.hampcode.com/terms")
+                .termsOfService("https://www.codelace.com/terms")
                 .license(mitLicense);
 
 
