@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResponseDTO {
+public class PostByStudentResponseDTO {
     private Long id;
     private StudentResponseDTO student;
+    private String title;
     private String demoUrl;
     private String repoUrl;
     private String description;
