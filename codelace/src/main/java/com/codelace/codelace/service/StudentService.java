@@ -141,14 +141,6 @@ public class StudentService {
 		return studentMapper.convertStudentToResponse(student);
 	}
 
-	// Method that deletes a student
-	public void deleteStudent(Long id) {
-		Student student = studentRepository.findById(id)
-				.orElseThrow(
-						() -> new ResourceNotFoundException("Student not found."));
-		studentRepository.delete(student);
-	}
-
 	// Method that returns a Project by RequestDTO
 	public ProjectDetailsResponseDTO getDetailsbyStudentAndProject(Long projectId, Long studentId) {
 

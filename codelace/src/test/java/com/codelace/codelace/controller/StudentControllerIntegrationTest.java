@@ -27,7 +27,7 @@ public class StudentControllerIntegrationTest {
 
     @Test
     public void testGetStudentById() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/students/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/students/{id}", 2))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -51,14 +51,6 @@ public class StudentControllerIntegrationTest {
             "/students/{id_student}/projects/{id_project}/details", 2, 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
-
-    // @Test
-    // public void testDeleteStudent() throws Exception {
-    //     mockMvc.perform(MockMvcRequestBuilders.get("/students/{id}", 3))
-    //             .andExpect(MockMvcResultMatchers.status().isOk());
-    // }
-
-    
 
     private String asJsonString(final Object obj) {
 		try {

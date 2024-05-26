@@ -46,8 +46,8 @@ public class InscriptionControllerIntegrationTest {
 
     // @Test
     // public void testDeleteInscription() throws Exception {
-    //     mockMvc.perform(MockMvcRequestBuilders.get("/inscriptions/{id}", 1))
-    //             .andExpect(MockMvcResultMatchers.status().isOk());
+    //     mockMvc.perform(MockMvcRequestBuilders.delete("/inscriptions/{id}", 1))
+    //             .andExpect(MockMvcResultMatchers.status().isNoContent());
     // }
 
     // Método auxiliar para convertir objetos a JSON

@@ -580,37 +580,6 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void testDeleteStudent_ExistingId() {
-        
-        // Assert
-        Long id = 1L;
-        Student student = new Student();
-        student.setId(id);
-
-        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
-
-        // Act & Assert
-        assertDoesNotThrow(() -> studentService.deleteStudent(id));
-
-        // Verify
-        verify(studentRepository, times(1)).delete(student);
-
-    }
-
-    @Test
-    public void testDeleteStudent_NonExistingId() {
-
-        // Assert
-        Long id = 1L;
-
-        when(studentRepository.findById(id)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> studentService.deleteStudent(id));
-    
-    }
-
-    @Test
     public void testGetDetailsByStudentAndProject_Successfull() {
 
         // Arrange
