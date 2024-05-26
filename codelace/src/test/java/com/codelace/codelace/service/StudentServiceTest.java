@@ -31,7 +31,6 @@ import com.codelace.codelace.model.dto.ProgressResponseDTO;
 import com.codelace.codelace.model.dto.ProjectDetailsResponseDTO;
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentRegisterResponseDTO;
-//import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
 import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.codelace.codelace.model.dto.SubscriptionResponseDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
