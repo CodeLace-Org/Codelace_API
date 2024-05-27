@@ -10,6 +10,7 @@ import com.codelace.codelace.model.dto.PostByProjectResponseDTO;
 import com.codelace.codelace.model.dto.PostByStudentResponseDTO;
 import com.codelace.codelace.model.dto.PostRequestDTO;
 import com.codelace.codelace.model.dto.PostResponseDTO;
+import com.codelace.codelace.model.dto.PostResponseIdDTO;
 import com.codelace.codelace.model.entity.Post;
 import com.codelace.codelace.model.entity.Student;
 
@@ -28,6 +29,10 @@ public class PostMapper {
 
     public PostResponseDTO convertToDTO(Post post){
         return modelMapper.map(post, PostResponseDTO.class);
+    }
+
+    public PostResponseIdDTO convertToResponseIdDTO(Post post) {
+        return modelMapper.map(post, PostResponseIdDTO.class);
     }
 
     public List<PostResponseDTO> convertToListDTO(List<Post> posts){

@@ -59,13 +59,16 @@ public class ProjectControllerIntegrationTest {
 				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	@Test
+	public void testResourcesByProject() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/projects/{id}/resources", "1"))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+	}
 	// @Test
 	// public void testDeleteProject() throws Exception {
 	// 	mockMvc.perform(MockMvcRequestBuilders.delete("/projects/{id}", "1"))
 	// 			.andExpect(MockMvcResultMatchers.status().isNoContent());
 	// }
-
-	// TODO -> Sovero ero haz tu test sovero cabezero ero cervezero
 
 	// Método auxiliar para convertir objetos a JSON
 	private String asJsonString(final Object obj) {
