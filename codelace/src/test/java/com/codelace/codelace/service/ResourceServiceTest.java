@@ -22,10 +22,14 @@ import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.ResourceMapper;
 import com.codelace.codelace.model.dto.ResourceRequestDTO;
 import com.codelace.codelace.model.dto.ResourceResponseDTO;
+import com.codelace.codelace.model.entity.Inscription;
 import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Resource;
+import com.codelace.codelace.model.entity.Route;
+import com.codelace.codelace.repository.InscriptionRepository;
 import com.codelace.codelace.repository.ProjectRepository;
 import com.codelace.codelace.repository.ResourceRepository;
+import com.codelace.codelace.repository.RouteRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class ResourceServiceTest {
@@ -38,6 +42,12 @@ public class ResourceServiceTest {
 
     @Mock
     private ResourceMapper resourcemapper;
+
+    @Mock
+    private RouteRepository routerepository;
+
+    @Mock
+    private InscriptionRepository inscriptionrepository;
 
     @InjectMocks
     private ResourceService resourceservice;
@@ -139,6 +149,94 @@ public class ResourceServiceTest {
         when(resourcerepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> resourceservice.getResourceById(id));
+    }
+
+    @Test
+    public void getAllResourcesByProject_Successfully(){
+        Long id = 1L;
+
+        Route route = new Route();
+        route.setId(1L);
+
+        Inscription inscription = new Inscription();
+        inscription.setRoute(route);
+
+        Project project = new Project();
+        project.setId(1L);
+        project.setRoute(route);
+
+        Resource resource1 = new Resource();
+        resource1.setId(1L);
+        resource1.setTitle("Resource1");
+        resource1.setLink("Link1.com");
+        resource1.setProject(project);
+
+        Resource resource2 = new Resource();
+        resource2.setId(2L);
+        resource2.setTitle("Resource2");
+        resource2.setLink("Link2.com");
+        resource2.setProject(project);
+
+        when(projectrepository.findById(id)).thenReturn(Optional.of(project));
+        when(inscriptionrepository.findByRoute(project.getRoute())).thenReturn(Optional.of(inscription));
+
+        List<Resource> resources = Arrays.asList(resource1, resource2);
+
+        when(resourcerepository.findAllByProject(project)).thenReturn(resources);
+
+        ResourceResponseDTO responseDTO1 = new ResourceResponseDTO();
+        responseDTO1.setId(resource1.getId());
+        responseDTO1.setTitle(resource1.getTitle());
+        responseDTO1.setLink(resource1.getLink());
+        responseDTO1.setProjectId(project.getId());
+
+        ResourceResponseDTO responseDTO2 = new ResourceResponseDTO();
+        responseDTO2.setId(resource2.getId());
+        responseDTO2.setTitle(resource2.getTitle());
+        responseDTO2.setLink(resource2.getLink());
+        responseDTO2.setProjectId(project.getId());
+
+        List<ResourceResponseDTO> expectResponse = Arrays.asList(responseDTO1, responseDTO2);
+
+        when(resourcemapper.convertToListDTO(resources)).thenReturn(expectResponse);
+
+        List<ResourceResponseDTO> result = resourceservice.getAllByProject(id);
+
+        assertNotNull(result);
+        assertEquals(expectResponse.size(), result.size());
+        
+        verify(projectrepository, times(1)).findById(id);
+        verify(inscriptionrepository, times(1)).findByRoute(route);
+        verify(resourcerepository, times(1)).findAllByProject(project);
+        verify(resourcemapper, times(1)).convertToListDTO(resources);
+    }
+
+    @Test
+    public void getAllResourcesByProject_ProjectNotFound(){
+        Long id = 1L;
+
+        Project project = new Project();
+        project.setId(999L);
+
+        when(projectrepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> resourceservice.getAllByProject(id));
+    }
+
+    @Test
+    public void getAllResourcesByProject_InscriptionNotFound(){
+        Long id = 1L;
+
+        Route route = new Route();
+        route.setId(1L);
+
+        Project project = new Project();
+        project.setId(1L);
+        project.setRoute(route);
+
+        when(projectrepository.findById(id)).thenReturn(Optional.of(project));
+        when(inscriptionrepository.findByRoute(project.getRoute())).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> resourceservice.getAllByProject(id));
     }
 
     @Test
