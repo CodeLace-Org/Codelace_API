@@ -54,7 +54,7 @@ public class ProjectControllerIntegrationTest {
 	}
 
 	@Test
-	public void testGetPostsByProjectId() throws Exception {
+	public void testGetAllPostsByProjectId() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/projects/{id}/posts", "1"))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 	}

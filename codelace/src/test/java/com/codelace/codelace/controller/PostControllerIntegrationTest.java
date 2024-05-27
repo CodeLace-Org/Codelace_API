@@ -20,7 +20,6 @@ public class PostControllerIntegrationTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	// TODO createPost
 	@Test
 	public void testGetPostById() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders
@@ -52,14 +51,14 @@ public class PostControllerIntegrationTest {
 	}
 
 	@Test
-	public void testGetPostByStudent() throws Exception {
+	public void testGetAllPostsByStudent() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders
 				.get("/posts/students/{student_id}", 1))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
 	@Test
-	public void testGetPostByProjectId() throws Exception {
+	public void testGetAllPostsByProjectId() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders
 				.get("/posts/projects/{project_id}", 1))
 				.andExpect(MockMvcResultMatchers.status().isOk());
