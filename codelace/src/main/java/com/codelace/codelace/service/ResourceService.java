@@ -11,6 +11,7 @@ import com.codelace.codelace.model.dto.ResourceRequestDTO;
 import com.codelace.codelace.model.dto.ResourceResponseDTO;
 import com.codelace.codelace.model.entity.Project;
 import com.codelace.codelace.model.entity.Resource;
+import com.codelace.codelace.repository.InscriptionRepository;
 import com.codelace.codelace.repository.ProjectRepository;
 import com.codelace.codelace.repository.ResourceRepository;
 
@@ -22,6 +23,7 @@ public class ResourceService {
 	private final ResourceMapper resourceMapper;
     private final ResourceRepository resourceRepository;
     private final ProjectRepository projectRepository;
+    private final InscriptionRepository inscriptionrepository;
 
     public List<ResourceResponseDTO> getAllResource(){
         List<Resource> resources = resourceRepository.findAll();
@@ -31,6 +33,13 @@ public class ResourceService {
     public ResourceResponseDTO getResourceById(Long id){
         Resource resource = resourceRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Resource not found"));
         return resourceMapper.convertToDTO(resource);
+    }
+
+    public List<ResourceResponseDTO> getAllByProject(Long id){
+        Project project = projectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        inscriptionrepository.findByRoute(project.getRoute()).orElseThrow(()-> new ResourceNotFoundException("Inscription not found"));
+        List<Resource> resources = resourceRepository.findAllByProject(project);
+        return resourceMapper.convertToListDTO(resources); 
     }
 
     public ResourceResponseDTO createResource(ResourceRequestDTO resourceRequestDto) {
