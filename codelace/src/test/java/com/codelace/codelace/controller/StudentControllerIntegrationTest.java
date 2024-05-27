@@ -34,10 +34,10 @@ public class StudentControllerIntegrationTest {
     @Test
     public void testCreateStudent() throws Exception {
         StudentRegisterRequestDTO studentRequestDTO = new StudentRegisterRequestDTO();
-        studentRequestDTO.setEmail("pepito123@gmail.com");
-        studentRequestDTO.setUsername("pepito123");
-        studentRequestDTO.setPwd("Hola123456!");
-        studentRequestDTO.setConfirmPassword("Hola123456!");
+        studentRequestDTO.setEmail("pepito1234@gmail.com");
+        studentRequestDTO.setUsername("pepito1234");
+        studentRequestDTO.setPwd("Hola1234567!");
+        studentRequestDTO.setConfirmPassword("Hola1234567!");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
                 .contentType(MediaType.APPLICATION_JSON)

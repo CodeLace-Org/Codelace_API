@@ -57,8 +57,8 @@ public class ProjectController {
 
 	//Method that returns all the posts of a project
 	@GetMapping("/{id}/posts")
-	public ResponseEntity<List<PostByProjectResponseDTO>> getPostsByProjectId(@PathVariable Long id){
-		List<PostByProjectResponseDTO> posts = postService.getPostsByProjectId(id);
+	public ResponseEntity<List<PostByProjectResponseDTO>> getAllPostsByProjectId(@PathVariable Long id){
+		List<PostByProjectResponseDTO> posts = postService.getAllPostsByProjectId(id);
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 

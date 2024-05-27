@@ -66,7 +66,7 @@ public class RouteController {
 
 	// ---------------------------- ENDPOINTS
 
-	//Method that gets all the projects by a routeId
+	// Method that gets all the projects by a routeId
 	@GetMapping("/{id}/projects")
 	public ResponseEntity<List<ProjectResponseDTO>> getProjectsByRoute(@PathVariable Long id){
 		List<ProjectResponseDTO> projects = routeService.getProjectsByRoute(id);
