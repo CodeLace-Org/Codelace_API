@@ -62,7 +62,11 @@ public class RouteControllerIntegrationTest {
 	// 			.andExpect(MockMvcResultMatchers.status().isNoContent());
 	// }
 
-	// TODO -> Sovero ero haz tu test sovero cabezero ero cervezero
+	@Test
+	public void testGetProjectsByRoute() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/routes/{id}/projects", 1))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
 	// Método auxiliar para convertir objetos a JSON
 	private String asJsonString(final Object obj) {
