@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
+import com.codelace.codelace.model.dto.StudentUpdatePasswordRequestDTO;
+import com.codelace.codelace.model.dto.StudentUpdateRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -43,6 +45,33 @@ public class StudentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(studentRequestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    public void testUpdateStudent() throws Exception {
+        StudentUpdateRequestDTO studentRequestDTO = new StudentUpdateRequestDTO();
+        studentRequestDTO.setUsername("raichi1");
+        studentRequestDTO.setEmail("raichi1@gmail.com");
+        studentRequestDTO.setStatus("Hola soy raichi.");
+        studentRequestDTO.setDescription("Hola soy raichi.");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/students/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(studentRequestDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testUpdateStudentPassword() throws Exception {
+        StudentUpdatePasswordRequestDTO studentRequestDTO = new StudentUpdatePasswordRequestDTO();
+        studentRequestDTO.setPwd("Hola123456!");
+        studentRequestDTO.setNewPassword("123456");
+        studentRequestDTO.setConfirmPassword("123456");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/students/{id}/password", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(studentRequestDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test

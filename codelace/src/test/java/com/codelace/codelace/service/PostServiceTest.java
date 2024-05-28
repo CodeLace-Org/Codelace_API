@@ -27,7 +27,6 @@ import com.codelace.codelace.model.dto.PostByProjectResponseDTO;
 import com.codelace.codelace.model.dto.PostByStudentResponseDTO;
 import com.codelace.codelace.model.dto.PostRequestDTO;
 import com.codelace.codelace.model.dto.PostResponseDTO;
-import com.codelace.codelace.model.dto.StudentRegisterRequestDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
 import com.codelace.codelace.model.entity.Post;
 import com.codelace.codelace.model.entity.Project;

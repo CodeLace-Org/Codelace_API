@@ -7,15 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.codelace.codelace.exception.ResourceDuplicateException;
 import com.codelace.codelace.exception.ResourceNotFoundException;
-// import com.codelace.codelace.exception.SubscriptionNotActiveException;
 import com.codelace.codelace.mapper.SubscriptionMapper;
 import com.codelace.codelace.model.dto.SubscriptionResponseDTO;
 import com.codelace.codelace.model.entity.Plan;
 import com.codelace.codelace.model.entity.Student;
 import com.codelace.codelace.model.entity.Subscription;
 import com.codelace.codelace.repository.PlanRepository;
-import com.codelace.codelace.repository.StudentRepository;
-// import com.codelace.codelace.repository.StudentRepository;
 import com.codelace.codelace.repository.SubscriptionRepository;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +27,6 @@ public class SubscriptionService {
 	// Instance repository
 	private final SubscriptionRepository subscriptionRepository;
 	private final PlanRepository planRepository;
-	private final StudentRepository studentRepository;
 
 	// Method that returns all the subscriptions
 	public List<SubscriptionResponseDTO> getAllSubscriptions() {
