@@ -12,13 +12,19 @@ import com.codelace.codelace.model.dto.PostByProjectResponseDTO;
 import com.codelace.codelace.model.dto.PostByStudentResponseDTO;
 import com.codelace.codelace.model.dto.PostRequestDTO;
 import com.codelace.codelace.model.dto.PostResponseDTO;
+import com.codelace.codelace.model.dto.PostResponseIdDTO;
 import com.codelace.codelace.model.dto.StudentResponseDTO;
+import com.codelace.codelace.model.entity.Comment;
 import com.codelace.codelace.model.entity.Post;
 import com.codelace.codelace.model.entity.Project;
+import com.codelace.codelace.model.entity.Rocket;
 import com.codelace.codelace.model.entity.Student;
+import com.codelace.codelace.repository.CommentRepository;
 import com.codelace.codelace.repository.PostRepository;
 import com.codelace.codelace.repository.ProjectRepository;
+import com.codelace.codelace.repository.RocketRepository;
 import com.codelace.codelace.repository.StudentRepository;
+import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 
@@ -28,20 +34,34 @@ public class PostService {
 	private PostRepository postRepository;
 	private ProjectRepository projectRepository;
 	private StudentRepository studentRepository;
+	private RocketRepository rocketRepository;
+	private CommentRepository commentRepository;
 	private PostMapper postMapper;
 	private StudentMapper studentMapper;
 	
 	// Method that returns a post by its id
-	public PostResponseDTO getPostById(Long id) {
-		Post post = postRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + id));
-		return postMapper.convertToDTO(post);
+	public PostResponseIdDTO getPostById(Long postId) {
+		Post post = postRepository.findById(postId)
+				.orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + postId));
+		Project project = projectRepository.findById(post.getProject().getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + post.getProject().getId()));
+		Optional<List<Rocket>> rockets = rocketRepository.findAllByPostAndStudent(post, post.getStudent());
+		Optional<List<Comment>> comments = commentRepository.findAllByPostAndStudent(post, post.getStudent());
+
+		PostResponseIdDTO postResponse = postMapper.convertToResponseIdDTO(post);
+		postResponse.setRockets((long) rockets.get().size());
+		postResponse.setComments((long) comments.get().size());
+		postResponse.setTitle(project.getTitle());
+		return postResponse;
 	}
 
 	// Method that returns all the posts
-	public List<PostResponseDTO> getAllPosts() {
-		List<Post> posts = postRepository.findAll();
-		return postMapper.convertToListDTO(posts);
+	public List<PostByProjectResponseDTO> getAllPosts() {
+		List<Object[]> posts = postRepository.findAllPosts();
+
+		return posts.stream()
+				.map(postMapper::convertToListProjectDTO)
+				.toList();
 	}
 
 	// Method that creates a post
@@ -77,7 +97,7 @@ public class PostService {
 	}
 
 	// Method that returns all the posts by project id
-	public List<PostByProjectResponseDTO> getPostsByProjectId(Long projectId) {
+	public List<PostByProjectResponseDTO> getAllPostsByProjectId(Long projectId) {
 		List<Object[]> posts = postRepository.findAllByProjectId(projectId)
 				.orElseThrow(() -> new ResourceNotFoundException("Posts not found for project with id " + projectId));
 
@@ -87,7 +107,7 @@ public class PostService {
 	}
 
 	// Method that returns a list of post by student id
-	public List<PostByStudentResponseDTO> getPostsByStudent(Long studentId) {
+	public List<PostByStudentResponseDTO> getAllPostsByStudent(Long studentId) {
 		Student student = studentRepository.findById(studentId)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found with id " + studentId));
 		List<Object[]> posts = postRepository.findAllByStudent(student)
