@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -28,178 +29,293 @@ import com.codelace.codelace.model.entity.Subscription;
 import com.codelace.codelace.repository.PlanRepository;
 import com.codelace.codelace.repository.StudentRepository;
 import com.codelace.codelace.repository.SubscriptionRepository;
+import com.codelace.codelace.service.external.PaymentServiceExternal;
 
 @ExtendWith(MockitoExtension.class)
 public class SubscriptionServiceTest {
-    @Mock
-    private SubscriptionMapper subscriptionMapper;
+	@Mock
+	private SubscriptionMapper subscriptionMapper;
 
-    @Mock
-    private SubscriptionRepository subscriptionRepository;
+	@Mock
+	private SubscriptionRepository subscriptionRepository;
 
-    @Mock
-    private PlanRepository planRepository;
+	@Mock
+	private PlanRepository planRepository;
 
-    @Mock
-    private StudentRepository studentRepository;
+	@Mock
+	private StudentRepository studentRepository;
 
-    @InjectMocks
-    private SubscriptionService subscriptionService;
+	@Mock
+	private PaymentServiceExternal paymentServiceExternal;
 
-    @Test
-    public void testGetAllSubscriptions() {
+	@InjectMocks
+	private SubscriptionService subscriptionService;
 
-        // Arrange
+	@Test
+	public void testGetAllSubscriptions() {
 
-        Subscription subscription1 = new Subscription();
-        Subscription subscription2 = new Subscription();
-        subscription1.setId(1L);
-        subscription2.setId(1L);
+		// Arrange
 
-        List<Subscription> subscriptions = Arrays.asList(subscription1, subscription2);
+		Subscription subscription1 = new Subscription();
+		Subscription subscription2 = new Subscription();
+		subscription1.setId(1L);
+		subscription2.setId(1L);
 
-        // Mocking repository
-        when(subscriptionRepository.findAll()).thenReturn(subscriptions);
+		List<Subscription> subscriptions = Arrays.asList(subscription1, subscription2);
 
-        SubscriptionResponseDTO responseDTO1 = new SubscriptionResponseDTO();
-        SubscriptionResponseDTO responseDTO2 = new SubscriptionResponseDTO();
-        responseDTO1.setId(subscription1.getId());
-        responseDTO2.setId(subscription2.getId());
+		// Mocking repository
+		when(subscriptionRepository.findAll()).thenReturn(subscriptions);
 
-        List<SubscriptionResponseDTO> expectedResponse = Arrays.asList(responseDTO1, responseDTO2);
+		SubscriptionResponseDTO responseDTO1 = new SubscriptionResponseDTO();
+		SubscriptionResponseDTO responseDTO2 = new SubscriptionResponseDTO();
+		responseDTO1.setId(subscription1.getId());
+		responseDTO2.setId(subscription2.getId());
 
-        when(subscriptionMapper.convertToListDTO(subscriptions)).thenReturn(expectedResponse);
+		List<SubscriptionResponseDTO> expectedResponse = Arrays.asList(responseDTO1, responseDTO2);
 
-        // Act
-        List<SubscriptionResponseDTO> result = subscriptionService.getAllSubscriptions();
+		when(subscriptionMapper.convertToListDTO(subscriptions)).thenReturn(expectedResponse);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(expectedResponse.size(), result.size());
+		// Act
+		List<SubscriptionResponseDTO> result = subscriptionService.getAllSubscriptions();
 
-        // Verify
-        verify(subscriptionRepository, times(1)).findAll();
-        verify(subscriptionMapper, times(1)).convertToListDTO(subscriptions);
-    }
+		// Assert
+		assertNotNull(result);
+		assertEquals(expectedResponse.size(), result.size());
 
-    @Test
-    public void testGetSubscriptionById_ExistingId() {
+		// Verify
+		verify(subscriptionRepository, times(1)).findAll();
+		verify(subscriptionMapper, times(1)).convertToListDTO(subscriptions);
+	}
 
-        //Arrange
-        Long id = 1L;
-        Subscription subscription = new Subscription();
-        subscription.setId(1L);
+	@Test
+	public void testGetSubscriptionById_ExistingId() {
 
-        when(subscriptionRepository.findById(id)).thenReturn(Optional.of(subscription));
+		// Arrange
+		Long id = 1L;
+		Subscription subscription = new Subscription();
+		subscription.setId(1L);
 
-        SubscriptionResponseDTO responseDTO = new SubscriptionResponseDTO();
-        responseDTO.setId(subscription.getId());
-        when(subscriptionMapper.convertEntityToResponse(subscription)).thenReturn(responseDTO);
+		when(subscriptionRepository.findById(id)).thenReturn(Optional.of(subscription));
 
-        // Act
-        SubscriptionResponseDTO result = subscriptionService.getSubscriptionById(id);
+		SubscriptionResponseDTO responseDTO = new SubscriptionResponseDTO();
+		responseDTO.setId(subscription.getId());
+		when(subscriptionMapper.convertEntityToResponse(subscription)).thenReturn(responseDTO);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(id, result.getId());
+		// Act
+		SubscriptionResponseDTO result = subscriptionService.getSubscriptionById(id);
 
-        // Verify
-        verify(subscriptionRepository, times(1)).findById(id);
-        verify(subscriptionMapper, times(1)).convertEntityToResponse(subscription);
-    }
+		// Assert
+		assertNotNull(result);
+		assertEquals(id, result.getId());
 
-    @Test
-    public void testGetSubscriptionById_SubscriptionNotFound() {
+		// Verify
+		verify(subscriptionRepository, times(1)).findById(id);
+		verify(subscriptionMapper, times(1)).convertEntityToResponse(subscription);
+	}
 
-        // Arrange
-        Long id = 1L;
+	@Test
+	public void testGetSubscriptionById_SubscriptionNotFound() {
 
-        when(subscriptionRepository.findById(id)).thenReturn(Optional.empty());
+		// Arrange
+		Long id = 1L;
 
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> subscriptionService.getSubscriptionById(id));
-    }
+		when(subscriptionRepository.findById(id)).thenReturn(Optional.empty());
 
-    @Test
-    public void testCreateSubscription_Successfull() {
+		// Act & Assert
+		assertThrows(ResourceNotFoundException.class, () -> subscriptionService.getSubscriptionById(id));
+	}
 
-        // Arrange
-        Student student = new Student();
-        student.setId(1L);
+	@Test
+	public void testCreateSubscription_Successfull() {
 
-        when(subscriptionRepository.findByStudent(student)).thenReturn(Optional.empty());
+		// Arrange
+		Student student = new Student();
+		student.setId(1L);
 
-        Plan plan = new Plan();
-        plan.setId(1L);
-        plan.setType("Gratis");
+		when(subscriptionRepository.findByStudent(student)).thenReturn(Optional.empty());
 
-        when(planRepository.findByType("Gratis")).thenReturn(Optional.of(plan));
+		Plan plan = new Plan();
+		plan.setId(1L);
+		plan.setType("Gratis");
 
-        LocalDate beginDate = LocalDate.now();
-        LocalDate endDate = beginDate.plusMonths(1);
+		when(planRepository.findByType("Gratis")).thenReturn(Optional.of(plan));
 
-        Subscription subscription = new Subscription();
-        subscription.setStudent(student);
-        subscription.setActive(true);
-        subscription.setBeginDate(beginDate);
-        subscription.setEndDate(endDate);
-        subscription.setPlan(plan);
+		LocalDate beginDate = LocalDate.now();
+		LocalDate endDate = beginDate.plusMonths(1);
 
-        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+		Subscription subscription = new Subscription();
+		subscription.setStudent(student);
+		subscription.setActive(true);
+		subscription.setBeginDate(beginDate);
+		subscription.setEndDate(endDate);
+		subscription.setPlan(plan);
 
-        SubscriptionResponseDTO subscriptionResponseDTO = new SubscriptionResponseDTO();
-        subscriptionResponseDTO.setId(subscription.getId());
+		when(subscriptionRepository.save(subscription)).thenReturn(subscription);
 
-        when(subscriptionMapper.convertEntityToResponse(subscription)).thenReturn(subscriptionResponseDTO);
+		SubscriptionResponseDTO subscriptionResponseDTO = new SubscriptionResponseDTO();
+		subscriptionResponseDTO.setId(subscription.getId());
 
-        // Act
-        SubscriptionResponseDTO result = subscriptionService.createSubscription(student);
+		when(subscriptionMapper.convertEntityToResponse(subscription)).thenReturn(subscriptionResponseDTO);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(subscription.getId(), result.getId());
+		// Act
+		SubscriptionResponseDTO result = subscriptionService.createSubscription(student);
 
-        // Verify
-        verify(subscriptionRepository, times(1)).findByStudent(student);
-        verify(planRepository, times(1)).findByType("Gratis");
-        verify(subscriptionRepository, times(1)).save(subscription);
-        verify(subscriptionMapper, times(1)).convertEntityToResponse(subscription);
+		// Assert
+		assertNotNull(result);
+		assertEquals(subscription.getId(), result.getId());
 
-    }
+		// Verify
+		verify(subscriptionRepository, times(1)).findByStudent(student);
+		verify(planRepository, times(1)).findByType("Gratis");
+		verify(subscriptionRepository, times(1)).save(subscription);
+		verify(subscriptionMapper, times(1)).convertEntityToResponse(subscription);
 
-    @Test
-    public void testCreateSubscription_SubscriptionAlreadyExists() {
-        // Arrange
-        Student student = new Student();
-        student.setId(1L);
+	}
 
-        Subscription subscription = new Subscription();
-        subscription.setStudent(student);
+	@Test
+	public void testCreateSubscription_SubscriptionAlreadyExists() {
+		// Arrange
+		Student student = new Student();
+		student.setId(1L);
 
-        when(subscriptionRepository.findByStudent(student)).thenReturn(Optional.of(subscription));
+		Subscription subscription = new Subscription();
+		subscription.setStudent(student);
 
-        // Act & Assert
-        assertThrows(ResourceDuplicateException.class, () -> subscriptionService.createSubscription(student));
-        
-    }
+		when(subscriptionRepository.findByStudent(student)).thenReturn(Optional.of(subscription));
 
-    @Test
-    public void testCreateSubscription_FreePlanNotFound() {
+		// Act & Assert
+		assertThrows(ResourceDuplicateException.class, () -> subscriptionService.createSubscription(student));
 
-        // Arrange
-        Student student = new Student();
-        student.setId(1L);
+	}
 
-        when(subscriptionRepository.findByStudent(student)).thenReturn(Optional.empty());
+	@Test
+	public void testCreateSubscription_FreePlanNotFound() {
 
-        String planType = "Gratis";
+		// Arrange
+		Student student = new Student();
+		student.setId(1L);
 
-        when(planRepository.findByType(planType)).thenReturn(Optional.empty());
+		when(subscriptionRepository.findByStudent(student)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> subscriptionService.createSubscription(student));
+		String planType = "Gratis";
 
-        // Verify
-        verify(subscriptionRepository, times(1)).findByStudent(student);
-    }
+		when(planRepository.findByType(planType)).thenReturn(Optional.empty());
+
+		// Act & Assert
+		assertThrows(ResourceNotFoundException.class, () -> subscriptionService.createSubscription(student));
+
+		// Verify
+		verify(subscriptionRepository, times(1)).findByStudent(student);
+	}
+
+	@Test
+	public void testUpdateSubscription() {
+		// Arrange
+		Long studentId = 1L, planId = 1L, plan2Id = 2L;
+
+		Plan plan = new Plan();
+		plan.setId(planId);
+		plan.setType("Gratis");
+		plan.setPrice(BigDecimal.ZERO);
+		plan.setDescription("Plan Free");
+
+		Plan plan2 = new Plan();
+		plan2.setId(plan2Id);
+		plan2.setType("Mensual");
+		plan2.setPrice(BigDecimal.valueOf(8.99));
+		plan2.setDescription("Plan Mensual");
+
+		Student student = new Student();
+		student.setId(studentId);
+		student.setUsername("username");
+
+		Subscription subscription = new Subscription();
+		subscription.setId(studentId);
+		subscription.setPlan(plan2);
+		subscription.setStudent(student);
+		subscription.setActive(true);
+
+		SubscriptionResponseDTO expected = new SubscriptionResponseDTO();
+		expected.setId(subscription.getId());
+		expected.setPlanId(planId);
+		expected.setPlanType(plan.getType());
+
+		// Mock Mapper
+		when(subscriptionMapper.convertEntityToResponse(subscription)).thenReturn(expected);
+
+		// Mock Repository
+		when(subscriptionRepository.findById(studentId))
+				.thenReturn(Optional.of(subscription));
+		when(planRepository.findById(planId)).thenReturn(Optional.of(plan));
+		when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+
+		// Act
+		SubscriptionResponseDTO response = subscriptionService.updateSubscription(studentId, planId);
+
+		// Assert
+		assertNotNull(response);
+		assertEquals(expected.getId(), response.getId());
+
+		// Verify
+		verify(subscriptionRepository, times(1)).findById(student.getId());
+		verify(planRepository, times(1)).findById(planId);
+		verify(subscriptionRepository, times(1)).save(subscription);
+		verify(subscriptionMapper, times(1)).convertEntityToResponse(subscription);
+	}
+
+	@Test
+	public void testUpdateSubscription_SubscriptionNotFound() {
+		// Arrange
+		Long studentId = 1L, planId = 1L;
+
+		when(subscriptionRepository.findById(studentId)).thenReturn(Optional.empty());
+
+		// Act & Assert
+		assertThrows(ResourceNotFoundException.class, () -> subscriptionService.updateSubscription(studentId, planId));
+	}
+
+	@Test
+	public void testUpdateSubscription_PlanNotFound() {
+		// Arrange
+		Long studentId = 1L, planId = 1L;
+
+		Student student = new Student();
+		student.setId(studentId);
+
+		Plan plan = new Plan();
+		plan.setId(2L);
+
+		Subscription subscription = new Subscription();
+		subscription.setId(studentId);
+		subscription.setStudent(student);
+		subscription.setPlan(plan);
+
+		when(subscriptionRepository.findById(studentId)).thenReturn(Optional.of(subscription));
+		when(planRepository.findById(planId)).thenReturn(Optional.empty());
+
+		// Act & Assert
+		assertThrows(ResourceNotFoundException.class, () -> subscriptionService.updateSubscription(studentId, planId));
+	}
+
+	@Test
+	public void testUpdateSubscription_SubscriptionAlreadyExists() {
+		// Arrange
+		Long studentId = 1L, planId = 1L;
+
+		Plan plan = new Plan();
+		plan.setId(planId);
+		plan.setType("Gratis");
+
+
+		Subscription subscription = new Subscription();
+		subscription.setId(studentId);
+		subscription.setPlan(plan);
+
+		when(subscriptionRepository.findById(studentId)).thenReturn(Optional.of(subscription));
+
+		// Act & Assert
+		assertThrows(ResourceDuplicateException.class, () -> subscriptionService.updateSubscription(studentId, planId));
+	}
+
+
 }
