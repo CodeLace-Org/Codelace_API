@@ -1,9 +1,12 @@
 package com.codelace.codelace.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codelace.codelace.exception.ResourceNotFoundException;
 import com.codelace.codelace.mapper.PostMapper;
@@ -75,8 +78,26 @@ public class PostService {
 		post.setProject(project);
 		post.setStudent(student);
 		post.setDate(LocalDate.now());
-		post = postRepository.save(post);
-		return postMapper.convertToDTO(post);
+
+		MultipartFile file = postRequestDTO.getImage();
+		try{
+			if (file.isEmpty()) {
+				throw new RuntimeException("Failed to store empty file.");
+			}
+
+			byte[] imageBytes;
+			try (InputStream inputStream = file.getInputStream()) {
+				imageBytes = inputStream.readAllBytes();
+			}
+
+			post.setImage(imageBytes);
+			
+			post = postRepository.save(post);
+			return postMapper.convertToDTO(post);
+
+		} catch (IOException e) {
+            throw new RuntimeException("Failed to store file.", e);
+        }
 	}
 
 	// Method that returns a post by student id and project id
