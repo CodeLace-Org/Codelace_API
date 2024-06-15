@@ -4,10 +4,14 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
+
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 
@@ -21,6 +25,18 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI myOpenAPI() {
+        // Configuración de seguridad JWT
+        SecurityScheme securityScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT")
+                .name("JWT Authentication");
+        Components components = new Components()
+                .addSecuritySchemes("bearerAuth", securityScheme);
+
+        // Requerimiento de seguridad para utilizar en las operaciones
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
+
         // Definir el servidor de desarrollo
         Server devServer = new Server();
         devServer.setUrl(devUrl);
@@ -49,6 +65,8 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(info)
-                .servers(List.of(devServer));
+                .servers(List.of(devServer))
+                .addSecurityItem(securityRequirement)
+                .components(components);
     }
 }
