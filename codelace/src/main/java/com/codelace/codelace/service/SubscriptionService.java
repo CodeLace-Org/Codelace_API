@@ -46,7 +46,7 @@ public class SubscriptionService {
 	// Method that creates a subscription
 	public SubscriptionResponseDTO createSubscription(Student student) {
 
-		String type = "Gratis";
+		String type = "Mensual";
 
 		if (subscriptionRepository.findByStudent(student).isPresent())
 			throw new ResourceDuplicateException("Subscription already exists");

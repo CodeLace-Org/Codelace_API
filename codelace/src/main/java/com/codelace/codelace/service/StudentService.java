@@ -2,6 +2,7 @@ package com.codelace.codelace.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.codelace.codelace.exception.BadRequestException;
@@ -25,6 +26,7 @@ import com.codelace.codelace.model.entity.Requirement;
 import com.codelace.codelace.model.entity.Route;
 import com.codelace.codelace.model.entity.Student;
 import com.codelace.codelace.model.entity.Subscription;
+import com.codelace.codelace.model.entity.enums.Role;
 import com.codelace.codelace.repository.InscriptionRepository;
 import com.codelace.codelace.repository.ProgressRepository;
 import com.codelace.codelace.repository.ProjectRepository;
@@ -52,6 +54,8 @@ public class StudentService {
 	// Instances of services
 	private final SubscriptionService subscriptionService;
 
+	private final PasswordEncoder passwordEncoder;
+
 	// Method that returns all the students
 	public List<StudentResponseDTO> getAllStudents() {
 		List<Student> students = studentRepository.findAll();
@@ -63,6 +67,14 @@ public class StudentService {
 		Student student = studentRepository.findById(id)
 				.orElseThrow(
 						() -> new ResourceNotFoundException("Student not found."));
+		return studentMapper.convertStudentToResponse(student);
+	}
+
+	public StudentResponseDTO findByEmail(String email) {
+		Student student = studentRepository
+						.findByEmail(email)
+						.orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+
 		return studentMapper.convertStudentToResponse(student);
 	}
 
@@ -86,6 +98,8 @@ public class StudentService {
 
 		// Creating the student and returning its information
 		Student student = studentMapper.convertStudentRegisterToEntity(studentRegisterRequestDTO);
+		student.setPwd(passwordEncoder.encode(password));
+		student.setRole(Role.USER);
 		student = studentRepository.save(student);
 
 		SubscriptionResponseDTO subscriptionDTO = subscriptionService.createSubscription(student);

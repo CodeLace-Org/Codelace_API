@@ -46,7 +46,7 @@ public class StudentController {
 	}
 
 	// Method that creates a student
-	@PostMapping
+	@PostMapping("/signup")
 	public ResponseEntity<StudentRegisterResponseDTO> createStudent(
 			@Validated @RequestBody StudentRegisterRequestDTO studentRegisterRequestDTO) {
 		StudentRegisterResponseDTO student = studentService.createStudent(studentRegisterRequestDTO);
