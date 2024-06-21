@@ -39,6 +39,13 @@ public class InscriptionController {
         return new ResponseEntity<>(inscription, HttpStatus.OK);
     }
 
+    // Method that returns the student's inscriptions
+    @GetMapping("students/{id}")
+    public ResponseEntity<List<InscriptionResponseDTO>> getAllInscriptionsByStudent(@PathVariable Long id) {
+        List<InscriptionResponseDTO> inscriptions = inscriptionService.getAllByStudent(id);
+        return new ResponseEntity<>(inscriptions, HttpStatus.OK);
+    }
+
     // Method that creates a Inscription
     @PostMapping
     public ResponseEntity<InscriptionResponseDTO> createInscription(@Validated @RequestBody InscriptionRequestDTO inscriptionRequestDTO) {

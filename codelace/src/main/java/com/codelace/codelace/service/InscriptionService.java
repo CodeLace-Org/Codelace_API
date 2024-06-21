@@ -83,6 +83,15 @@ public class InscriptionService {
 
     }
 
+    // Find all inscriptions by student id
+    public List<InscriptionResponseDTO> getAllByStudent(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found."));
+
+        List<Inscription> inscriptions = inscriptionRepository.findAllByStudent(student);
+        return inscriptionMapper.convertToListDTO(inscriptions);
+    }
+
     // Method that deletes a inscription
     public void deleteInscription(Long id) {
         Inscription inscription = inscriptionRepository.findById(id)
