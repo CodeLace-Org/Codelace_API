@@ -11,7 +11,6 @@ import com.codelace.codelace.model.dto.BlogRequestDTO;
 import com.codelace.codelace.model.dto.BlogResponseDTO;
 import com.codelace.codelace.model.entity.Blog;
 import com.codelace.codelace.model.entity.Project;
-import com.codelace.codelace.model.entity.Resource;
 import com.codelace.codelace.repository.BlogRepository;
 import com.codelace.codelace.repository.ProjectRepository;
 
