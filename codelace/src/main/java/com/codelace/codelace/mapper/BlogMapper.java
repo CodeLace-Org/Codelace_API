@@ -14,24 +14,23 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 public class BlogMapper {
-    
-    private final ModelMapper modelMapper;
 
-    // Request Blog DTO to Entity
-    public Blog convertToEntity(BlogRequestDTO blogRequestDTO) {
-        return modelMapper.map(blogRequestDTO, Blog.class);
-    }
+	private final ModelMapper modelMapper;
 
-    // Blog Entity to Response DTO
-    public BlogResponseDTO convertToResponse(Blog blog) {
-        return modelMapper.map(blog, BlogResponseDTO.class);
-    }
+	// Request Blog DTO to Entity
+	public Blog convertToEntity(BlogRequestDTO blogRequestDTO) {
+		return modelMapper.map(blogRequestDTO, Blog.class);
+	}
 
-    // List Blog Entity to List response DTO
-    public List<BlogResponseDTO> convertToResponse(List<Blog> blogs){
-        return blogs.stream()
-                .map(this::convertToResponse)
-                .toList();
-    }
-    
+	// Blog Entity to Response DTO
+	public BlogResponseDTO convertToResponse(Blog blog) {
+		return modelMapper.map(blog, BlogResponseDTO.class);
+	}
+
+	// List Blog Entity to List response DTO
+	public List<BlogResponseDTO> convertToResponse(List<Blog> blogs) {
+		return blogs.stream()
+				.map(this::convertToResponse)
+				.toList();
+	}
 }
