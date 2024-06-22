@@ -15,6 +15,7 @@ public class PostResponseDTO {
     private String demoUrl;
     private String repoUrl;
     private String description;
+    private String title;
     private LocalDate date;
     private byte[] image;
 }
