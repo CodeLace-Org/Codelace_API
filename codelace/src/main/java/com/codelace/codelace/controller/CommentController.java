@@ -9,10 +9,16 @@ import com.codelace.codelace.service.CommentService;
 import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
@@ -28,5 +34,11 @@ public class CommentController {
 		CommentResponseDTO response = commentService.createComment(commentRequestDTO);
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
+	@GetMapping("/post/{post_id}")
+	public ResponseEntity<List<CommentResponseDTO>> getAllCommentsByPostId(@PathVariable Long post_id) {
+		List<CommentResponseDTO> response = commentService.getAllCommentsByPostId(post_id);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	
 }

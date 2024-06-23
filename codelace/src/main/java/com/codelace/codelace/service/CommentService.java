@@ -1,6 +1,7 @@
 package com.codelace.codelace.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,12 @@ public class CommentService {
 		comment.setStudent(student);
 		comment = commentRepository.save(comment);
 		return commentMapper.convertToResponse(comment);
+	}
+
+	public List<CommentResponseDTO> getAllCommentsByPostId(Long post_id) {
+		Post post = postRepository.findById(post_id)
+				.orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + post_id));
+		List<Comment> comments = commentRepository.findAllByPost(post);
+		return commentMapper.convertToResponse(comments);
 	}
 }

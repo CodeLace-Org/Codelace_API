@@ -107,7 +107,7 @@ public class PostServiceTest {
 		rocket2.setId(2L);
 		List<Rocket> rockets = Arrays.asList(rocket1, rocket2);
 
-		when(rocketRepository.findAllByPostAndStudent(post, post.getStudent())).thenReturn(Optional.of(rockets));
+		when(rocketRepository.findAllByPostAndStudent(post, post.getStudent())).thenReturn(rockets);
 
 		Comment comment1 = new Comment();
 		Comment comment2 = new Comment();
@@ -115,7 +115,7 @@ public class PostServiceTest {
 		comment2.setId(2L);
 		List<Comment> comments = Arrays.asList(comment1, comment2);
 
-		when(commentRepository.findAllByPostAndStudent(post, post.getStudent())).thenReturn(Optional.of(comments));
+		when(commentRepository.findAllByPostAndStudent(post, post.getStudent())).thenReturn(comments);
 	
 		when(projectRepository.findById(post.getProject().getId())).thenReturn(Optional.of(project));
 
