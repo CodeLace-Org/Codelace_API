@@ -10,5 +10,7 @@ import com.codelace.codelace.model.entity.Rocket;
 import com.codelace.codelace.model.entity.Student;
 
 public interface RocketRepository extends JpaRepository<Rocket, Long> {
-	Optional<List<Rocket>> findAllByPostAndStudent(Post posts, Student student);
+	List<Rocket> findAllByPost(Post post);
+	List<Rocket> findAllByPostAndStudent(Post posts, Student student);
+	Optional<Rocket> findByPostIdAndStudentId(Long post_id, Long student_id);
 }

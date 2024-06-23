@@ -24,7 +24,6 @@ import com.codelace.codelace.repository.PostRepository;
 import com.codelace.codelace.repository.ProjectRepository;
 import com.codelace.codelace.repository.RocketRepository;
 import com.codelace.codelace.repository.StudentRepository;
-import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 
@@ -45,12 +44,13 @@ public class PostService {
 				.orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + postId));
 		Project project = projectRepository.findById(post.getProject().getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + post.getProject().getId()));
-		Optional<List<Rocket>> rockets = rocketRepository.findAllByPostAndStudent(post, post.getStudent());
-		Optional<List<Comment>> comments = commentRepository.findAllByPostAndStudent(post, post.getStudent());
+		
+		List<Rocket> rockets = rocketRepository.findAllByPost(post);
+		List<Comment> comments = commentRepository.findAllByPost(post);
 
 		PostResponseIdDTO postResponse = postMapper.convertToResponseIdDTO(post);
-		postResponse.setRockets((long) rockets.get().size());
-		postResponse.setComments((long) comments.get().size());
+		postResponse.setRockets((long) rockets.size());
+		postResponse.setComments((long) comments.size());
 		postResponse.setTitle(project.getTitle());
 		return postResponse;
 	}
